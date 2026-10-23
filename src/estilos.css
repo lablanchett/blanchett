@@ -61,6 +61,16 @@ img { max-width: 100%; display: block; }
 }
 .nav-ig:hover { border-color: var(--lavanda); color: var(--lavanda); }
 .nav-ig svg { width: 1.2rem; height: 1.2rem; }
+.nav-idiomas {
+  display: flex;
+  list-style: none;
+  gap: .6rem;
+  font-size: .8125rem;
+  letter-spacing: .02em;
+}
+.nav-idiomas a, .nav-idiomas span { color: var(--suave); }
+.nav-idiomas a:hover { color: var(--lavanda); }
+.nav-idiomas span[aria-current] { color: var(--texto); font-weight: 600; }
 .marca img {
   width: 100%;
   height: auto;

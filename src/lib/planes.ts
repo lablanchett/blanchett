@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { t, type Locale } from './i18n';
 
 export type Plan = CollectionEntry<'planes'>['data'] & {
   id: string;
@@ -7,11 +8,13 @@ export type Plan = CollectionEntry<'planes'>['data'] & {
 };
 
 const ZONA = 'Europe/Madrid';
-const fmtDia = new Intl.DateTimeFormat('es', { weekday: 'short', day: 'numeric', month: 'short', timeZone: ZONA });
+const formatosDia: Partial<Record<Locale, Intl.DateTimeFormat>> = {};
+const fmtDia = (locale: Locale) =>
+  formatosDia[locale] ??= new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: ZONA });
 const hora = (h: string) => /^\d{2}:\d{2}$/.test(h);
 
 /** Calcula inicio y final de cada plan (en hora de Barcelona). */
-export function prepararPlanes(entradas: CollectionEntry<'planes'>[], ahora = new Date()): Plan[] {
+export function prepararPlanes(entradas: CollectionEntry<'planes'>[], locale: Locale = 'es', ahora = new Date()): Plan[] {
   const planes: Plan[] = entradas
     .filter((e) => e.data.publicado && e.data.nombre)
     .map((e) => {
@@ -34,19 +37,19 @@ export function prepararPlanes(entradas: CollectionEntry<'planes'>[], ahora = ne
   const conFecha = planes
     .filter((p) => p.inicio && p.final && p.final > ahora)
     .sort((a, b) => a.inicio!.getTime() - b.inicio!.getTime());
-  const sinFecha = planes.filter((p) => !p.inicio).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  const sinFecha = planes.filter((p) => !p.inicio).sort((a, b) => a.nombre.localeCompare(b.nombre, locale));
   return [...conFecha, ...sinFecha];
 }
 
-export function dia(p: Plan): string {
-  if (!p.inicio) return 'Próximamente';
-  const t = fmtDia.format(p.inicio).replace(/\./g, '');
-  return t.charAt(0).toUpperCase() + t.slice(1);
+export function dia(p: Plan, locale: Locale = 'es'): string {
+  if (!p.inicio) return t(locale).proximamente;
+  const texto = fmtDia(locale).format(p.inicio).replace(/\./g, '');
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-export function horario(p: Plan): string {
+export function horario(p: Plan, locale: Locale = 'es'): string {
   if (!hora(p.hora)) return '';
-  return hora(p.fin) ? `de ${p.hora} a ${p.fin}` : `desde las ${p.hora}`;
+  return hora(p.fin) ? t(locale).deA(p.hora, p.fin) : t(locale).desdeLas(p.hora);
 }
 
 export function mapa(p: Plan): string {
