@@ -233,24 +233,6 @@ img { max-width: 100%; display: block; }
 .fila .sin-link { color: var(--suave); font-size: 0.95rem; }
 .vacio { color: var(--suave); padding-block: 1.25rem; }
 
-/* Presentación del proyecto */
-.presentacion { padding-bottom: 3rem; }
-.presentacion-seccion {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: 1.5rem 3rem;
-  border-top: 1px solid var(--linea);
-  padding-block: 2.5rem;
-}
-.presentacion-seccion h2 { font-size: 1.3rem; font-weight: 500; }
-.presentacion-seccion p { max-width: 65ch; color: var(--suave); }
-.presentacion-seccion p + p { margin-top: 1rem; }
-.presentacion-contacto { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; overflow-wrap: anywhere; }
-.presentacion-contacto a { color: var(--lavanda); text-underline-offset: 0.25em; }
-@media (max-width: 40rem) {
-  .presentacion-seccion { grid-template-columns: 1fr; gap: 1rem; padding-block: 2rem; }
-}
-
 /* Instagram */
 .insta { padding-block: 1rem 4.5rem; }
 .insta[hidden] { display: none; }

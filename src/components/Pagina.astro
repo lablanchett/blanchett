@@ -4,7 +4,6 @@ import '../estilos.css';
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import sitio from '../lib/sitio';
-import { presentacion } from '../lib/presentacion';
 import { prepararPlanes, dia, horario, mapa, ruta } from '../lib/planes';
 import { t, locales, nombresLocale, type Locale } from '../lib/i18n';
 
@@ -134,22 +133,6 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
       )) : <li class="vacio">{i.planesPronto}</li>}
     </ul>
   </section>
-
-  <div class="presentacion">
-    {presentacion[locale].map((seccion) => (
-      <section class="presentacion-seccion" aria-labelledby={seccion.id}>
-        <h2 id={seccion.id}>{seccion.titulo}</h2>
-        <div>{seccion.parrafos.map((parrafo) => <p>{parrafo}</p>)}</div>
-      </section>
-    ))}
-    <section class="presentacion-seccion" aria-labelledby="contacto">
-      <h2 id="contacto">{i.contacto}</h2>
-      <div class="presentacion-contacto">
-        {sitio.email && <a href={`mailto:${sitio.email}`}>{sitio.email}</a>}
-        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram · @la.blanchett</a>}
-      </div>
-    </section>
-  </div>
 
   {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
     <section class="insta" id="insta" aria-labelledby="titulo-insta" data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
