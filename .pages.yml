@@ -71,7 +71,7 @@ content:
       - name: direccion
         label: Dirección
         type: string
-        description: "Calle, número, código postal y ciudad. Se convierte en un enlace a Google Maps."
+        description: "Pega un enlace de Google Maps (también vale el enlace corto), o escribe calle, número, código postal y ciudad."
       - name: entradas
         label: Enlace de entradas o formulario
         type: string

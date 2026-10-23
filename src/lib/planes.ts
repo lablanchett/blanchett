@@ -62,6 +62,13 @@ export function horario(p: Plan, locale: Locale = 'es'): string {
 }
 
 export function mapa(p: Plan): string {
+  const direccion = p.direccion.trim();
+  try {
+    const enlace = new URL(direccion);
+    if (enlace.protocol === 'https:' || enlace.protocol === 'http:') return enlace.href;
+  } catch {
+    // Una dirección escrita se convierte en una búsqueda de Google Maps.
+  }
   const q = [p.lugar, p.direccion].filter(Boolean).join(', ');
   return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
 }
