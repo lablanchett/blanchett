@@ -5,6 +5,8 @@ import datos from '../data/sitio.json';
 // porque el CMS no protege ediciones directas al archivo.
 const esquema = z.object({
   lema: z.string().trim().default(''),
+  lema_ca: z.string().trim().default(''),
+  lema_en: z.string().trim().default(''),
   instagram: z
     .string()
     .trim()

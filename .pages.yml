@@ -99,10 +99,18 @@ content:
       delete: false
     fields:
       - name: lema
-        label: Lema
+        label: Lema (castellano)
         type: string
         required: true
         description: La frase que aparece debajo del logo.
+      - name: lema_ca
+        label: Lema (català)
+        type: string
+        description: Opcional. Si lo dejas vacío, se usa el lema en castellano en la versión en catalán.
+      - name: lema_en
+        label: Lema (English)
+        type: string
+        description: Optional. If left empty, the Spanish slogan is used on the English version.
       - name: instagram
         label: Enlace de Instagram
         type: string

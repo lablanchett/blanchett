@@ -16,7 +16,8 @@ const i = t(locale);
 const planes = prepararPlanes(await getCollection('planes'), locale);
 const [primera, ...resto] = planes;
 const lugarDe = (p: (typeof planes)[number]) => [p.tipo, p.lugar].filter(Boolean).join(', ');
-const descripcion = `${sitio.lema} ${i.descripcionSufijo}`;
+const lema = (locale === 'ca' && sitio.lema_ca) || (locale === 'en' && sitio.lema_en) || sitio.lema;
+const descripcion = `${lema} ${i.descripcionSufijo}`;
 ---
 <!doctype html>
 <html lang={locale}>
@@ -57,7 +58,7 @@ const descripcion = `${sitio.lema} ${i.descripcionSufijo}`;
     </div>
   </nav>
   <h1 class="marca"><img src={ruta('/logos/la-blanchett.png')} alt={i.marcaAlt} width="878" height="187"></h1>
-  <p class="lema">{sitio.lema}</p>
+  <p class="lema">{lema}</p>
 </header>
 
 <main class="contenedor">
