@@ -1,0 +1,173 @@
+# Configuración del editor (Pages CMS): https://app.pagescms.org
+# Define qué se puede editar en la web y cómo se ve el formulario.
+
+media:
+  input: public/media
+  output: /media
+  rename: safe
+
+settings:
+  commit:
+    identity: user
+
+content:
+  - name: planes
+    label: Planes
+    type: collection
+    path: src/content/planes
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: nombre
+      fields: [nombre, fecha, publicado, destacado]
+      sort: [fecha, nombre]
+      default:
+        sort: fecha
+        order: desc
+    fields:
+      - name: nombre
+        label: Nombre del plan
+        type: string
+        required: true
+        description: "Por ejemplo: ¡Halloween!, Bollos a pie, Cata de vino."
+      - name: publicado
+        label: Mostrar en la web
+        type: boolean
+        default: true
+        description: Desactívalo para esconder el plan sin borrarlo.
+      - name: tipo
+        label: Tipo de plan
+        type: string
+        description: "Opcional. Por ejemplo: Senderismo, Fiesta, Cata."
+      - name: destacado
+        label: Destacar este plan
+        type: boolean
+        default: false
+        description: "Aparece en grande al principio. Si marcas varios, se destaca el primero por fecha. Si no marcas ninguno, se muestra el próximo. Los planes pasados u ocultos no se destacan."
+      - name: con
+        label: Artista o invitada (opcional)
+        type: string
+        description: "Solo para personas o artistas. Añade «con» antes del nombre: «¡Halloween! con DJ Anabel». Para explicar el plan, usa Descripción."
+      - name: descripcion
+        label: Descripción
+        type: text
+        description: "Opcional. Se muestra debajo del nombre, sin añadir «con». Por ejemplo: Ruta por Gualba-Montseny, plancito gratis."
+      - name: fecha
+        label: Fecha
+        type: date
+        default: ""
+        options:
+          format: yyyy-MM-dd
+        description: Déjala vacía si todavía no hay fecha. Saldrá como «Próximamente».
+      - name: hora
+        label: Hora de inicio
+        type: string
+        pattern:
+          regex: "^$|^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          message: "Escribe la hora así: 22:00"
+        description: "Opcional. Formato 22:00."
+      - name: fin
+        label: Hora de cierre
+        type: string
+        pattern:
+          regex: "^$|^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          message: "Escribe la hora así: 03:00"
+        description: "Opcional. Formato 03:00."
+      - name: lugar
+        label: Sala o punto de encuentro
+        type: string
+        description: "Por ejemplo: Rufián."
+      - name: direccion
+        label: Dirección
+        type: string
+        description: "Pega un enlace de Google Maps (también vale el enlace corto), o escribe calle, número, código postal y ciudad."
+      - name: entradas
+        label: Enlace de entradas o formulario
+        type: string
+        pattern:
+          regex: "^$|^https?://"
+          message: "Pega el enlace completo, empezando por https://"
+        description: "Pega el enlace completo de Entradium o del formulario, incluidos sus parámetros si los necesita."
+      - name: accion
+        label: Texto del botón
+        type: select
+        default: entradas
+        options:
+          values:
+            - label: Entradas
+              value: entradas
+            - label: Apuntarme
+              value: apuntarme
+      - name: cartel
+        label: Cartel
+        type: image
+        description: Imagen vertical. Mejor en buena calidad (por ejemplo 900 × 1350).
+      - name: video
+        label: Vídeo
+        type: file
+        options:
+          categories: [video]
+        description: "Opcional. Sustituye al cartel en el plan destacado. MP4 vertical de menos de 10 MB."
+
+  - name: sitio
+    label: Datos de la web
+    type: file
+    path: src/data/sitio.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: lema
+        label: Lema (castellano)
+        type: string
+        required: true
+        description: La frase que aparece debajo del logo.
+      - name: lema_ca
+        label: Lema (català)
+        type: string
+        description: Opcional. Si lo dejas vacío, se usa el lema en castellano en la versión en catalán.
+      - name: lema_en
+        label: Lema (English)
+        type: string
+        description: Optional. If left empty, the Spanish slogan is used on the English version.
+      - name: tituloSeo
+        label: Título para Google (castellano)
+        type: string
+        description: "Lo que aparece en el resultado de búsqueda de Google, antes de «| La Blanchett». Por ejemplo: «Fiestas y eventos lésbicos en Barcelona»."
+      - name: tituloSeo_ca
+        label: Títol per a Google (català)
+        type: string
+        description: Opcional. Si lo dejas vacío, se usa el título en castellano.
+      - name: tituloSeo_en
+        label: Google title (English)
+        type: string
+        description: Optional. If left empty, the Spanish title is used on the English version.
+      - name: explicacion
+        label: Quiénes somos (castellano)
+        type: text
+        description: Un párrafo visible en la portada que explica qué es La Blanchett y para quién. También se usa como descripción en los resultados de Google.
+      - name: explicacion_ca
+        label: Qui som (català)
+        type: text
+        description: Opcional. Si lo dejas vacío, se usa el texto en castellano.
+      - name: explicacion_en
+        label: Who we are (English)
+        type: text
+        description: Optional. If left empty, the Spanish text is used on the English version.
+      - name: instagram
+        label: Enlace de Instagram
+        type: string
+      - name: email
+        label: Correo de contacto
+        type: string
+      - name: feedInstagram
+        label: Feed de Instagram (Behold)
+        type: string
+        description: No lo cambies salvo que cambiéis de cuenta en Behold.
+      - name: fotosInstagram
+        label: Número de fotos de Instagram
+        type: number
+        options:
+          min: 0
+          max: 12
+        description: "6 queda bien. Pon 0 para ocultar la sección."

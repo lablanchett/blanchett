@@ -1,0 +1,19 @@
+{
+  "name": "lablanchett",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/montserrat": "5.2.8",
+    "astro": "5.18.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
