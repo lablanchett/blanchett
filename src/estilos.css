@@ -202,6 +202,13 @@ img { max-width: 100%; display: block; }
   border-bottom: 1px solid var(--linea);
 }
 .fila-fecha { font-weight: 500; }
+.fila-detalle { min-width: 0; }
+.fila-cartel {
+  width: 9rem;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
 .fila-lugar { color: var(--suave); font-size: 0.95rem; }
 .fila a {
   color: var(--lavanda);

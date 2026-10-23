@@ -107,7 +107,8 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
       {resto.length ? resto.map((p) => (
         <li class="fila">
           <span class="fila-fecha">{dia(p, locale)}</span>
-          <span>
+          <span class="fila-detalle">
+            {p.cartel && <img class="fila-cartel" src={ruta(p.cartel)} alt={i.cartelAlt(p.nombre)} loading="lazy" decoding="async">}
             {p.nombre}{p.con && ` ${i.con} ${p.con}`}
             {lugarDe(p) && (
               <><br><span class="fila-lugar">{p.direccion
