@@ -19,7 +19,7 @@ content:
     filename: "{primary}.md"
     view:
       primary: nombre
-      fields: [nombre, fecha, publicado]
+      fields: [nombre, fecha, publicado, destacado]
       sort: [fecha, nombre]
       default:
         sort: fecha
@@ -39,6 +39,11 @@ content:
         label: Tipo de plan
         type: string
         description: "Opcional. Por ejemplo: Senderismo, Fiesta, Cata."
+      - name: destacado
+        label: Destacar este plan
+        type: boolean
+        default: false
+        description: "Aparece en grande al principio. Si marcas varios, se destaca el primero por fecha. Si no marcas ninguno, se muestra el próximo. Los planes pasados u ocultos no se destacan."
       - name: con
         label: Artista o invitada (opcional)
         type: string

@@ -25,6 +25,7 @@ const planes = defineCollection({
   schema: z.object({
     nombre: texto,
     publicado: z.boolean().default(true),
+    destacado: z.boolean().default(false),
     tipo: texto.default(''),
     con: texto.default(''),
     descripcion: texto.default(''),

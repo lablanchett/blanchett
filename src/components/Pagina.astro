@@ -14,7 +14,8 @@ const { locale } = Astro.props;
 const i = t(locale);
 
 const planes = prepararPlanes(await getCollection('planes'), locale);
-const [primera, ...resto] = planes;
+const primera = planes.find((p) => p.destacado) ?? planes[0];
+const resto = planes.filter((p) => p !== primera);
 const lugarDe = (p: (typeof planes)[number]) => [p.tipo, p.lugar].filter(Boolean).join(', ');
 const lema = (locale === 'ca' && sitio.lema_ca) || (locale === 'en' && sitio.lema_en) || sitio.lema;
 const descripcion = `${lema} ${i.descripcionSufijo}`;
@@ -74,7 +75,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
           <img class="cartel" src={ruta(primera.cartel)} alt={i.cartelAlt(primera.nombre)}>
         ) : null}
         <div>
-          <h2 class="seccion-titulo" id="titulo-proxima">{i.proximoPlan}</h2>
+          <h2 class="seccion-titulo" id="titulo-proxima">{primera.destacado ? i.planDestacado : i.proximoPlan}</h2>
           <p class="proxima-fecha">{dia(primera, locale)}</p>
           <p class="proxima-nombre">{primera.nombre}{primera.con && ` ${i.con} ${primera.con}`}</p>
           {primera.descripcion && <p class="plan-descripcion">{primera.descripcion}</p>}
@@ -109,7 +110,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
         <li class:list={['fila', { 'fila-con-cartel': p.cartel }]}>
           {p.cartel && <img class="fila-cartel" src={ruta(p.cartel)} alt={i.cartelAlt(p.nombre)} loading="lazy" decoding="async">}
           <span class="fila-detalle">
-            <span class="fila-fecha">{dia(p, locale)}</span>
+            <span class="fila-fecha">{dia(p, locale)}{horario(p, locale) && ` · ${horario(p, locale)}`}</span>
             {p.nombre}{p.con && ` ${i.con} ${p.con}`}
             {p.descripcion && <span class="plan-descripcion">{p.descripcion}</span>}
             {lugarDe(p) && (
