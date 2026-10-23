@@ -2,6 +2,7 @@
 nombre: Bollos a Pie
 publicado: true
 tipo: Senderismo
+con: Ruta por Gualba-Montseny
 fecha: 2026-11-07
 hora: 08:15
 lugar: "Estación de tren: Barcelona-El Clot"
