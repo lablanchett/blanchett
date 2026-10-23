@@ -4,6 +4,7 @@ import '../estilos.css';
 import { getCollection } from 'astro:content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import sitio from '../lib/sitio';
+import { presentacion } from '../lib/presentacion';
 import { prepararPlanes, dia, horario, mapa, ruta } from '../lib/planes';
 import { t, locales, nombresLocale, type Locale } from '../lib/i18n';
 
@@ -18,22 +19,28 @@ const primera = planes.find((p) => p.destacado) ?? planes[0];
 const resto = planes.filter((p) => p !== primera);
 const lugarDe = (p: (typeof planes)[number]) => [p.tipo, p.lugar].filter(Boolean).join(', ');
 const lema = (locale === 'ca' && sitio.lema_ca) || (locale === 'en' && sitio.lema_en) || sitio.lema;
-const descripcion = `${lema} ${i.descripcionSufijo}`;
+const tituloSeo = (locale === 'ca' && sitio.tituloSeo_ca) || (locale === 'en' && sitio.tituloSeo_en) || sitio.tituloSeo;
+const explicacion = (locale === 'ca' && sitio.explicacion_ca) || (locale === 'en' && sitio.explicacion_en) || sitio.explicacion;
+const descripcion = explicacion || `${lema} ${i.descripcionSufijo}`;
+const titulo = tituloSeo ? `${tituloSeo} | La Blanchett` : `La Blanchett — ${lema}`;
+const sitioBase = Astro.site ?? new URL('https://lablanchett.com');
+const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
 ---
 <!doctype html>
 <html lang={locale}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>La Blanchett</title>
+  <title>{titulo}</title>
   <meta name="description" content={descripcion}>
-  <meta property="og:title" content="La Blanchett">
+  <meta property="og:title" content={titulo}>
   <meta property="og:description" content={descripcion}>
-  {primera?.cartel && <meta property="og:image" content={new URL(ruta(primera.cartel), Astro.site ?? 'https://lablanchett.com').href}>}
+  <meta property="og:image" content={primera?.cartel ? new URL(ruta(primera.cartel), sitioBase).href : imagenRespaldo}>
+  <link rel="canonical" href={new URL(getRelativeLocaleUrl(locale, '/'), sitioBase).href}>
   <link rel="icon" type="image/png" href={ruta('/favicon.png')}>
   <link rel="apple-touch-icon" href={ruta('/apple-touch-icon.png')}>
   {locales.map((l) => (
-    <link rel="alternate" hreflang={l} href={new URL(getRelativeLocaleUrl(l, '/'), Astro.site ?? 'https://lablanchett.com').href}>
+    <link rel="alternate" hreflang={l} href={new URL(getRelativeLocaleUrl(l, '/'), sitioBase).href}>
   ))}
 </head>
 <body>
@@ -60,6 +67,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
   </nav>
   <h1 class="marca"><img src={ruta('/logos/la-blanchett.png')} alt={i.marcaAlt} width="878" height="187"></h1>
   <p class="lema">{lema}</p>
+  {explicacion && <p class="explicacion">{explicacion}</p>}
 </header>
 
 <main class="contenedor">
@@ -126,6 +134,22 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
       )) : <li class="vacio">{i.planesPronto}</li>}
     </ul>
   </section>
+
+  <div class="presentacion">
+    {presentacion[locale].map((seccion) => (
+      <section class="presentacion-seccion" aria-labelledby={seccion.id}>
+        <h2 id={seccion.id}>{seccion.titulo}</h2>
+        <div>{seccion.parrafos.map((parrafo) => <p>{parrafo}</p>)}</div>
+      </section>
+    ))}
+    <section class="presentacion-seccion" aria-labelledby="contacto">
+      <h2 id="contacto">{i.contacto}</h2>
+      <div class="presentacion-contacto">
+        {sitio.email && <a href={`mailto:${sitio.email}`}>{sitio.email}</a>}
+        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram · @la.blanchett</a>}
+      </div>
+    </section>
+  </div>
 
   {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
     <section class="insta" id="insta" aria-labelledby="titulo-insta" data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>

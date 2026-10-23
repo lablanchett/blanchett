@@ -130,6 +130,30 @@ content:
         label: Lema (English)
         type: string
         description: Optional. If left empty, the Spanish slogan is used on the English version.
+      - name: tituloSeo
+        label: Título para Google (castellano)
+        type: string
+        description: "Lo que aparece en el resultado de búsqueda de Google, antes de «| La Blanchett». Por ejemplo: «Fiestas y eventos lésbicos en Barcelona»."
+      - name: tituloSeo_ca
+        label: Títol per a Google (català)
+        type: string
+        description: Opcional. Si lo dejas vacío, se usa el título en castellano.
+      - name: tituloSeo_en
+        label: Google title (English)
+        type: string
+        description: Optional. If left empty, the Spanish title is used on the English version.
+      - name: explicacion
+        label: Quiénes somos (castellano)
+        type: text
+        description: Un párrafo visible en la portada que explica qué es La Blanchett y para quién. También se usa como descripción en los resultados de Google.
+      - name: explicacion_ca
+        label: Qui som (català)
+        type: text
+        description: Opcional. Si lo dejas vacío, se usa el texto en castellano.
+      - name: explicacion_en
+        label: Who we are (English)
+        type: text
+        description: Optional. If left empty, the Spanish text is used on the English version.
       - name: instagram
         label: Enlace de Instagram
         type: string

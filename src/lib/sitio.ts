@@ -7,6 +7,12 @@ const esquema = z.object({
   lema: z.string().trim().default(''),
   lema_ca: z.string().trim().default(''),
   lema_en: z.string().trim().default(''),
+  tituloSeo: z.string().trim().default(''),
+  tituloSeo_ca: z.string().trim().default(''),
+  tituloSeo_en: z.string().trim().default(''),
+  explicacion: z.string().trim().default(''),
+  explicacion_ca: z.string().trim().default(''),
+  explicacion_en: z.string().trim().default(''),
   instagram: z
     .string()
     .trim()
