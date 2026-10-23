@@ -2,7 +2,8 @@
 nombre: Bollos a Pie
 publicado: true
 tipo: Senderismo
-con: Ruta por Gualba-Montseny, plancito Gratis
+destacado: false
+descripcion: Ruta por Gualba-Montseny, plancito Gratis
 fecha: 2026-11-07
 hora: 08:15
 lugar: "Salida desde estación de tren: Barcelona-El Clot"
