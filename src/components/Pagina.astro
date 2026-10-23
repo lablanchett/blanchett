@@ -22,6 +22,7 @@ const tituloSeo = (locale === 'ca' && sitio.tituloSeo_ca) || (locale === 'en' &&
 const explicacion = (locale === 'ca' && sitio.explicacion_ca) || (locale === 'en' && sitio.explicacion_en) || sitio.explicacion;
 const quienesFrase = (locale === 'ca' && sitio.quienesFrase_ca) || (locale === 'en' && sitio.quienesFrase_en) || sitio.quienesFrase;
 const quienesTexto = (locale === 'ca' && sitio.quienesTexto_ca) || (locale === 'en' && sitio.quienesTexto_en) || sitio.quienesTexto;
+const colaboraTexto = (locale === 'ca' && sitio.colaboraTexto_ca) || (locale === 'en' && sitio.colaboraTexto_en) || sitio.colaboraTexto;
 const descripcion = explicacion || `${lema} ${i.descripcionSufijo}`;
 const titulo = tituloSeo ? `${tituloSeo} | La Blanchett` : `La Blanchett — ${lema}`;
 const sitioBase = Astro.site ?? new URL('https://lablanchett.com');
@@ -136,16 +137,31 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     </ul>
   </section>
 
-  {quienesFrase && (
-    <section class="nosotras" aria-labelledby="titulo-nosotras">
-      <h2 class="seccion-titulo" id="titulo-nosotras">{i.quienesSomos}</h2>
-      <p class="nosotras-frase">{quienesFrase}</p>
-      {quienesTexto && <p class="nosotras-texto">{quienesTexto}</p>}
-      <ul class="nosotras-cifras">
-        <li><span class="nosotras-cifra">6</span><span class="nosotras-cifra-etiqueta">{i.cifraTardeo}</span></li>
-        <li><span class="nosotras-cifra">3</span><span class="nosotras-cifra-etiqueta">{i.cifraIntima}</span></li>
-        <li><span class="nosotras-cifra">+170</span><span class="nosotras-cifra-etiqueta">{i.cifraAsistentes}</span></li>
-      </ul>
+  {(quienesFrase || colaboraTexto) && (
+    <section class="desplegables">
+      {quienesFrase && (
+        <details class="desplegable">
+          <summary>{i.quienesSomos}</summary>
+          <div class="desplegable-contenido">
+            <p class="nosotras-frase">{quienesFrase}</p>
+            {quienesTexto && <p class="nosotras-texto">{quienesTexto}</p>}
+            <ul class="nosotras-cifras">
+              <li><span class="nosotras-cifra">6</span><span class="nosotras-cifra-etiqueta">{i.cifraTardeo}</span></li>
+              <li><span class="nosotras-cifra">3</span><span class="nosotras-cifra-etiqueta">{i.cifraIntima}</span></li>
+              <li><span class="nosotras-cifra">+170</span><span class="nosotras-cifra-etiqueta">{i.cifraAsistentes}</span></li>
+            </ul>
+          </div>
+        </details>
+      )}
+      {colaboraTexto && (
+        <details class="desplegable">
+          <summary>{i.colabora}</summary>
+          <div class="desplegable-contenido">
+            <p class="nosotras-texto">{colaboraTexto}</p>
+            {sitio.email && <a class="colabora-enlace" href={`mailto:${sitio.email}`}>{sitio.email}</a>}
+          </div>
+        </details>
+      )}
     </section>
   )}
 

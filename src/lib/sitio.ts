@@ -19,6 +19,9 @@ const esquema = z.object({
   quienesTexto: z.string().trim().default(''),
   quienesTexto_ca: z.string().trim().default(''),
   quienesTexto_en: z.string().trim().default(''),
+  colaboraTexto: z.string().trim().default(''),
+  colaboraTexto_ca: z.string().trim().default(''),
+  colaboraTexto_en: z.string().trim().default(''),
   instagram: z
     .string()
     .trim()

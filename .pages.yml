@@ -178,6 +178,18 @@ content:
         label: "Who we are: paragraph (English)"
         type: text
         description: Optional. If left empty, the Spanish paragraph is used on the English version.
+      - name: colaboraTexto
+        label: "¿Tenés un espacio?: texto (castellano)"
+        type: text
+        description: El texto del desplegable para locales que quieran colaborar.
+      - name: colaboraTexto_ca
+        label: "Tens un espai?: text (català)"
+        type: text
+        description: Opcional. Si lo dejas vacío, se usa el texto en castellano.
+      - name: colaboraTexto_en
+        label: "Have a venue?: text (English)"
+        type: text
+        description: Optional. If left empty, the Spanish text is used on the English version.
       - name: instagram
         label: Enlace de Instagram
         type: string
