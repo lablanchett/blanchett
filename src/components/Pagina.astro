@@ -171,11 +171,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
   )}
 
   {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
-    <section class="insta" id="insta" aria-labelledby="titulo-insta" data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
-      <div class="insta-cabecera">
-        <h2 class="seccion-titulo" id="titulo-insta">{i.enInstagram}</h2>
-        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram</a>}
-      </div>
+    <section class="insta" id="insta" aria-label={i.enInstagram} data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
       <ul class="insta-grid" id="insta-grid">
         {Array.from({ length: sitio.fotosInstagram }, () => <li class="insta-hueco" aria-hidden="true"></li>)}
       </ul>
