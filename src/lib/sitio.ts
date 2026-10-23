@@ -13,6 +13,12 @@ const esquema = z.object({
   explicacion: z.string().trim().default(''),
   explicacion_ca: z.string().trim().default(''),
   explicacion_en: z.string().trim().default(''),
+  quienesFrase: z.string().trim().default(''),
+  quienesFrase_ca: z.string().trim().default(''),
+  quienesFrase_en: z.string().trim().default(''),
+  quienesTexto: z.string().trim().default(''),
+  quienesTexto_ca: z.string().trim().default(''),
+  quienesTexto_en: z.string().trim().default(''),
   instagram: z
     .string()
     .trim()

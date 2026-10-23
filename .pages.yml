@@ -143,17 +143,41 @@ content:
         type: string
         description: Optional. If left empty, the Spanish title is used on the English version.
       - name: explicacion
-        label: Quiénes somos (castellano)
+        label: Resumen corto (castellano)
         type: text
-        description: Un párrafo visible en la portada que explica qué es La Blanchett y para quién. También se usa como descripción en los resultados de Google.
+        description: Una frase corta debajo del lema, al principio de la web. También se usa como descripción en los resultados de Google.
       - name: explicacion_ca
-        label: Qui som (català)
+        label: Resum curt (català)
         type: text
         description: Opcional. Si lo dejas vacío, se usa el texto en castellano.
       - name: explicacion_en
-        label: Who we are (English)
+        label: Short summary (English)
         type: text
         description: Optional. If left empty, the Spanish text is used on the English version.
+      - name: quienesFrase
+        label: "Quiénes somos: frase destacada (castellano)"
+        type: string
+        description: La frase grande de la sección «Quiénes somos», más abajo en la página.
+      - name: quienesFrase_ca
+        label: "Qui som: frase destacada (català)"
+        type: string
+        description: Opcional. Si lo dejas vacío, se usa la frase en castellano.
+      - name: quienesFrase_en
+        label: "Who we are: headline (English)"
+        type: string
+        description: Optional. If left empty, the Spanish headline is used on the English version.
+      - name: quienesTexto
+        label: "Quiénes somos: párrafo (castellano)"
+        type: text
+        description: El párrafo explicativo de la sección «Quiénes somos».
+      - name: quienesTexto_ca
+        label: "Qui som: paràgraf (català)"
+        type: text
+        description: Opcional. Si lo dejas vacío, se usa el párrafo en castellano.
+      - name: quienesTexto_en
+        label: "Who we are: paragraph (English)"
+        type: text
+        description: Optional. If left empty, the Spanish paragraph is used on the English version.
       - name: instagram
         label: Enlace de Instagram
         type: string

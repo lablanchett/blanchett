@@ -233,6 +233,39 @@ img { max-width: 100%; display: block; }
 .fila .sin-link { color: var(--suave); font-size: 0.95rem; }
 .vacio { color: var(--suave); padding-block: 1.25rem; }
 
+/* Quiénes somos */
+.nosotras {
+  border-top: 1px solid var(--linea);
+  padding-block: 3.5rem;
+}
+.nosotras-frase {
+  font-weight: 300;
+  font-size: clamp(1.4rem, 3.2vw, 2.1rem);
+  line-height: 1.3;
+  max-width: 24ch;
+}
+.nosotras-texto {
+  margin-top: 1.1rem;
+  color: var(--suave);
+  max-width: 58ch;
+}
+.nosotras-cifras {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-top: 2.25rem;
+}
+.nosotras-cifras li { display: flex; flex-direction: column; gap: 0.2rem; }
+.nosotras-cifra {
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--lavanda);
+}
+.nosotras-cifra-etiqueta { font-size: 0.85rem; color: var(--suave); }
+
 /* Instagram */
 .insta { padding-block: 1rem 4.5rem; }
 .insta[hidden] { display: none; }
