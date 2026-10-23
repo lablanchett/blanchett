@@ -27,6 +27,7 @@ const planes = defineCollection({
     publicado: z.boolean().default(true),
     tipo: texto.default(''),
     con: texto.default(''),
+    descripcion: texto.default(''),
     fecha: fecha.default(''),
     hora: texto.default(''),
     fin: texto.default(''),

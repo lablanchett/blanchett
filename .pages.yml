@@ -40,9 +40,13 @@ content:
         type: string
         description: "Opcional. Por ejemplo: Senderismo, Fiesta, Cata."
       - name: con
-        label: Con (DJ, artista, invitada…)
+        label: Artista o invitada (opcional)
         type: string
-        description: "Opcional. Se muestra como «¡Halloween! con DJ Anabel»."
+        description: "Solo para personas o artistas. Añade «con» antes del nombre: «¡Halloween! con DJ Anabel». Para explicar el plan, usa Descripción."
+      - name: descripcion
+        label: Descripción
+        type: text
+        description: "Opcional. Se muestra debajo del nombre, sin añadir «con». Por ejemplo: Ruta por Gualba-Montseny, plancito gratis."
       - name: fecha
         label: Fecha
         type: date

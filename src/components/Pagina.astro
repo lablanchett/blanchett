@@ -77,6 +77,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
           <h2 class="seccion-titulo" id="titulo-proxima">{i.proximoPlan}</h2>
           <p class="proxima-fecha">{dia(primera, locale)}</p>
           <p class="proxima-nombre">{primera.nombre}{primera.con && ` ${i.con} ${primera.con}`}</p>
+          {primera.descripcion && <p class="plan-descripcion">{primera.descripcion}</p>}
           {(lugarDe(primera) || horario(primera, locale)) && (
             <p class="proxima-lugar">{[lugarDe(primera), horario(primera, locale)].filter(Boolean).join(', ')}</p>
           )}
@@ -110,6 +111,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
           <span class="fila-detalle">
             <span class="fila-fecha">{dia(p, locale)}</span>
             {p.nombre}{p.con && ` ${i.con} ${p.con}`}
+            {p.descripcion && <span class="plan-descripcion">{p.descripcion}</span>}
             {lugarDe(p) && (
               <><br><span class="fila-lugar">{p.direccion
                 ? <a href={mapa(p)} target="_blank" rel="noopener">{lugarDe(p)}</a>

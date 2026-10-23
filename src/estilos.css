@@ -204,6 +204,14 @@ img { max-width: 100%; display: block; }
 .fila-con-cartel { grid-template-columns: 9rem minmax(0, 1fr) auto; }
 .fila-fecha { display: block; font-weight: 500; margin-bottom: 0.5rem; }
 .fila-detalle { min-width: 0; }
+.plan-descripcion {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--suave);
+  font-size: 0.95rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
 .fila-cartel {
   width: 9rem;
   height: auto;
