@@ -11,7 +11,13 @@ const ZONA = 'Europe/Madrid';
 const formatosDia: Partial<Record<Locale, Intl.DateTimeFormat>> = {};
 const fmtDia = (locale: Locale) =>
   formatosDia[locale] ??= new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: ZONA });
-const hora = (h: string) => /^\d{2}:\d{2}$/.test(h);
+const hora = (h: string) => /^([01]\d|2[0-3]):[0-5]\d$/.test(h);
+
+/** Día siguiente a una fecha ISO (yyyy-mm-dd), en calendario, sin tocar la hora. */
+function diaSiguiente(fechaISO: string): string {
+  const [anio, mes, dia] = fechaISO.split('-').map(Number);
+  return new Date(Date.UTC(anio, mes - 1, dia + 1)).toISOString().slice(0, 10);
+}
 
 /** Calcula inicio y final de cada plan (en hora de Barcelona). */
 export function prepararPlanes(entradas: CollectionEntry<'planes'>[], locale: Locale = 'es', ahora = new Date()): Plan[] {
@@ -22,10 +28,13 @@ export function prepararPlanes(entradas: CollectionEntry<'planes'>[], locale: Lo
       if (!/^\d{4}-\d{2}-\d{2}$/.test(d.fecha)) return { ...d, id: e.id, inicio: null, final: null };
 
       const inicio = new Date(`${d.fecha}T${hora(d.hora) ? d.hora : '12:00'}`);
+      if (isNaN(inicio.getTime())) return { ...d, id: e.id, inicio: null, final: null };
+
       let final: Date;
       if (hora(d.hora) && hora(d.fin)) {
         final = new Date(`${d.fecha}T${d.fin}`);
-        if (final <= inicio) final = new Date(final.getTime() + 24 * 3600e3); // cierra de madrugada
+        // Si cierra de madrugada, el día siguiente puede tener una hora menos o una hora más (cambio de hora).
+        if (final <= inicio) final = new Date(`${diaSiguiente(d.fecha)}T${d.fin}`);
       } else if (hora(d.hora)) {
         final = new Date(inicio.getTime() + 6 * 3600e3);
       } else {

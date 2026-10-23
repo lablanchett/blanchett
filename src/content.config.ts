@@ -14,6 +14,12 @@ const fecha = z.preprocess((v) => {
   return String(v).trim().slice(0, 10);
 }, z.string());
 
+// Enlaces editables: la validación del CMS (.pages.yml) no protege ediciones hechas
+// directamente en los archivos, así que la repetimos aquí.
+const url = texto.refine((v) => v === '' || /^https?:\/\//.test(v), {
+  message: 'Debe ser un enlace que empiece por http:// o https://',
+});
+
 const planes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/planes' }),
   schema: z.object({
@@ -26,7 +32,7 @@ const planes = defineCollection({
     fin: texto.default(''),
     lugar: texto.default(''),
     direccion: texto.default(''),
-    entradas: texto.default(''),
+    entradas: url.default(''),
     cartel: texto.default(''),
     video: texto.default(''),
   }),
