@@ -52,8 +52,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     <a href={getRelativeLocaleUrl(locale, '/')}><img class="nav-monograma" src={ruta('/logos/monograma.png')} alt={i.inicioAlt}></a>
     <ul class="nav-secciones">
       <li><a href="#planes">{i.menuPlanes}</a></li>
-      {quienesFrase && <li><a href="#quienes-somos">{i.quienesSomos}</a></li>}
-      {sitio.instagram && <li><a href={sitio.feedInstagram && sitio.fotosInstagram > 0 ? '#insta' : sitio.instagram}>Instagram</a></li>}
+      {quienesFrase && <li><a href="#quienes-somos">{i.menuNosotras}</a></li>}
     </ul>
     <div class="nav-derecha">
       <ul class="nav-idiomas" aria-label="Idioma / Language">
