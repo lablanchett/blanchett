@@ -89,8 +89,8 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
         </div>
         <div>
           {primera.entradas
-            ? <a class="boton" href={primera.entradas} target="_blank" rel="noopener">{i.comprarEntradas}</a>
-            : <span class="boton" aria-disabled="true">{i.entradasPronto}</span>}
+            ? <a class="boton" href={primera.entradas} target="_blank" rel="noopener">{primera.accion === 'apuntarme' ? i.apuntarme : i.comprarEntradas}</a>
+            : <span class="boton" aria-disabled="true">{primera.accion === 'apuntarme' ? i.inscripcionesPronto : i.entradasPronto}</span>}
         </div>
       </>
     ) : (
@@ -117,7 +117,7 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
             )}
           </span>
           {p.entradas
-            ? <a href={p.entradas} target="_blank" rel="noopener">{i.entradas}</a>
+            ? <a href={p.entradas} target="_blank" rel="noopener">{p.accion === 'apuntarme' ? i.apuntarme : i.entradas}</a>
             : p.inicio ? <span class="sin-link">{i.pronto}</span> : <span></span>}
         </li>
       )) : <li class="vacio">{i.planesPronto}</li>}

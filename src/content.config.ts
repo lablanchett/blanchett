@@ -33,6 +33,7 @@ const planes = defineCollection({
     lugar: texto.default(''),
     direccion: texto.default(''),
     entradas: url.default(''),
+    accion: z.enum(['entradas', 'apuntarme']).default('entradas'),
     cartel: texto.default(''),
     video: texto.default(''),
   }),

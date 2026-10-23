@@ -73,12 +73,22 @@ content:
         type: string
         description: "Calle, número, código postal y ciudad. Se convierte en un enlace a Google Maps."
       - name: entradas
-        label: Enlace de entradas (Entradium)
+        label: Enlace de entradas o formulario
         type: string
         pattern:
           regex: "^$|^https?://"
           message: "Pega el enlace completo, empezando por https://"
-        description: "Pega el enlace del evento sin lo que va después del «?». Si está vacío, sale «Entradas pronto»."
+        description: "Pega el enlace completo de Entradium o del formulario, incluidos sus parámetros si los necesita."
+      - name: accion
+        label: Texto del botón
+        type: select
+        default: entradas
+        options:
+          values:
+            - label: Entradas
+              value: entradas
+            - label: Apuntarme
+              value: apuntarme
       - name: cartel
         label: Cartel
         type: image
