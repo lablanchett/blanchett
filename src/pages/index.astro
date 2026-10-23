@@ -1,0 +1,175 @@
+---
+import '@fontsource-variable/montserrat';
+import '../estilos.css';
+import { getCollection } from 'astro:content';
+import sitio from '../data/sitio.json';
+import { prepararPlanes, dia, horario, mapa, ruta } from '../lib/planes';
+
+const planes = prepararPlanes(await getCollection('planes'));
+const [primera, ...resto] = planes;
+const lugarDe = (p: (typeof planes)[number]) => [p.tipo, p.lugar].filter(Boolean).join(', ');
+const descripcion = `${sitio.lema} en Barcelona.`;
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>La Blanchett</title>
+  <meta name="description" content={descripcion}>
+  <meta property="og:title" content="La Blanchett">
+  <meta property="og:description" content={descripcion}>
+  {primera?.cartel && <meta property="og:image" content={new URL(ruta(primera.cartel), Astro.site ?? 'https://lablanchett.com').href}>}
+  <link rel="icon" type="image/png" href={ruta('/favicon.png')}>
+  <link rel="apple-touch-icon" href={ruta('/apple-touch-icon.png')}>
+</head>
+<body>
+
+<header class="portada contenedor">
+  <nav class="nav" aria-label="Principal">
+    <a href={ruta('/')}><img class="nav-monograma" src={ruta('/logos/monograma.png')} alt="La Blanchett, inicio"></a>
+    {sitio.instagram && (
+      <div class="nav-derecha">
+        <a class="nav-ig" href={sitio.instagram} target="_blank" rel="noopener" aria-label="Instagram de La Blanchett">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    )}
+  </nav>
+  <h1 class="marca"><img src={ruta('/logos/la-blanchett.png')} alt="La Blanchett, bollería de especialidad" width="878" height="187"></h1>
+  <p class="lema">{sitio.lema}</p>
+</header>
+
+<main class="contenedor">
+  <section class:list={['proxima', { 'con-cartel': primera && (primera.cartel || primera.video) }]} aria-labelledby="titulo-proxima">
+    {primera ? (
+      <>
+        {primera.video ? (
+          <div class="media">
+            <video src={ruta(primera.video)} poster={primera.cartel ? ruta(primera.cartel) : undefined} muted loop playsinline preload="metadata" aria-label={`Vídeo de ${primera.nombre}`}></video>
+            <button class="sonido" type="button" aria-label="Activar sonido"></button>
+          </div>
+        ) : primera.cartel ? (
+          <img class="cartel" src={ruta(primera.cartel)} alt={`Cartel de ${primera.nombre}`}>
+        ) : null}
+        <div>
+          <h2 class="seccion-titulo" id="titulo-proxima">Próximo plan</h2>
+          <p class="proxima-fecha">{dia(primera)}</p>
+          <p class="proxima-nombre">{primera.nombre}{primera.con && ` con ${primera.con}`}</p>
+          {(lugarDe(primera) || horario(primera)) && (
+            <p class="proxima-lugar">{[lugarDe(primera), horario(primera)].filter(Boolean).join(', ')}</p>
+          )}
+          {primera.direccion && (
+            <a class="mapa" href={mapa(primera)} target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              <span>{primera.direccion}</span>
+            </a>
+          )}
+        </div>
+        <div>
+          {primera.entradas
+            ? <a class="boton" href={primera.entradas} target="_blank" rel="noopener">Comprar entradas</a>
+            : <span class="boton" aria-disabled="true">Entradas pronto</span>}
+        </div>
+      </>
+    ) : (
+      <div>
+        <h2 class="seccion-titulo" id="titulo-proxima">Próximo plan</h2>
+        <p class="proxima-nombre">Estamos preparando el próximo plan. Síguenos en Instagram para enterarte primero.</p>
+      </div>
+    )}
+  </section>
+
+  <section class="fechas" aria-labelledby="titulo-fechas">
+    <h2 class="seccion-titulo" id="titulo-fechas">Más planes</h2>
+    <ul class="lista">
+      {resto.length ? resto.map((p) => (
+        <li class="fila">
+          <span class="fila-fecha">{dia(p)}</span>
+          <span>
+            {p.nombre}{p.con && ` con ${p.con}`}
+            {lugarDe(p) && (
+              <><br><span class="fila-lugar">{p.direccion
+                ? <a href={mapa(p)} target="_blank" rel="noopener">{lugarDe(p)}</a>
+                : lugarDe(p)}</span></>
+            )}
+          </span>
+          {p.entradas
+            ? <a href={p.entradas} target="_blank" rel="noopener">Entradas</a>
+            : p.inicio ? <span class="sin-link">Pronto</span> : <span></span>}
+        </li>
+      )) : <li class="vacio">Nuevos planes muy pronto.</li>}
+    </ul>
+  </section>
+
+  {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
+    <section class="insta" id="insta" aria-labelledby="titulo-insta" data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
+      <div class="insta-cabecera">
+        <h2 class="seccion-titulo" id="titulo-insta">En Instagram</h2>
+        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Ver perfil</a>}
+      </div>
+      <ul class="insta-grid" id="insta-grid">
+        {Array.from({ length: sitio.fotosInstagram }, () => <li class="insta-hueco" aria-hidden="true"></li>)}
+      </ul>
+    </section>
+  )}
+</main>
+
+<footer class="pie contenedor">
+  <span>© {new Date().getFullYear()} La Blanchett</span>
+  <nav aria-label="Redes y contacto">
+    {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram</a>}
+    {sitio.email && <a href={`mailto:${sitio.email}`}>{sitio.email}</a>}
+  </nav>
+</footer>
+
+<script>
+  // Vídeo del plan destacado: suena solo si se pulsa el botón
+  const MUDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
+  const SONIDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  const video = document.querySelector<HTMLVideoElement>('.media video');
+  const boton = document.querySelector<HTMLButtonElement>('.sonido');
+  if (video && boton) {
+    boton.innerHTML = MUDO;
+    const usarControles = () => { video.controls = true; boton.hidden = true; };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) usarControles();
+    else video.play().catch(usarControles);
+    boton.addEventListener('click', () => {
+      video.muted = !video.muted;
+      if (!video.muted) video.play();
+      boton.innerHTML = video.muted ? MUDO : SONIDO;
+      boton.setAttribute('aria-label', video.muted ? 'Activar sonido' : 'Silenciar');
+    });
+  }
+
+  // Feed de Instagram (Behold)
+  const seccion = document.getElementById('insta');
+  const grid = document.getElementById('insta-grid');
+  if (seccion && grid) {
+    const n = Number(seccion.dataset.n) || 6;
+    const ICONOS: Record<string, string> = {
+      VIDEO: '<svg class="insta-tipo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
+      CAROUSEL_ALBUM: '<svg class="insta-tipo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>',
+    };
+    const esc = (t: string) => { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+    fetch(seccion.dataset.feed!)
+      .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+      .then((datos) => {
+        const posts = (Array.isArray(datos) ? datos : datos.posts || []).slice(0, n);
+        if (!posts.length) throw new Error('sin publicaciones');
+        grid.innerHTML = posts.map((p: any) => {
+          const tam = p.sizes && (p.sizes.medium || p.sizes.large);
+          const src = (tam && tam.mediaUrl) || (p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl);
+          const alt = String(p.altText || p.prunedCaption || p.caption || 'Publicación de La Blanchett en Instagram').slice(0, 140);
+          return `<li><a href="${esc(p.permalink)}" target="_blank" rel="noopener">${ICONOS[p.mediaType] || ''}<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" decoding="async"></a></li>`;
+        }).join('');
+        grid.querySelectorAll('img').forEach((img) => {
+          const ok = () => img.classList.add('cargada');
+          if (img.complete) ok(); else img.addEventListener('load', ok);
+        });
+      })
+      .catch(() => { seccion.hidden = true; });
+  }
+</script>
+</body>
+</html>
