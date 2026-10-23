@@ -195,19 +195,19 @@ img { max-width: 100%; display: block; }
 .lista { list-style: none; border-top: 1px solid var(--linea); }
 .fila {
   display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.25rem 2rem;
-  align-items: baseline;
+  align-items: center;
   padding-block: 1.25rem;
   border-bottom: 1px solid var(--linea);
 }
-.fila-fecha { font-weight: 500; }
+.fila-con-cartel { grid-template-columns: 9rem minmax(0, 1fr) auto; }
+.fila-fecha { display: block; font-weight: 500; margin-bottom: 0.5rem; }
 .fila-detalle { min-width: 0; }
 .fila-cartel {
   width: 9rem;
   height: auto;
   border-radius: 4px;
-  margin-bottom: 0.75rem;
 }
 .fila-lugar { color: var(--suave); font-size: 0.95rem; }
 .fila a {
@@ -308,6 +308,9 @@ img { max-width: 100%; display: block; }
   .cartel { width: 60%; }
   .boton { text-align: center; width: 100%; }
   .fila { grid-template-columns: 1fr auto; }
-  .fila-fecha { grid-column: 1 / -1; }
+  .fila { column-gap: 1rem; }
+  .fila-con-cartel { grid-template-columns: 5.5rem minmax(0, 1fr); }
+  .fila-con-cartel .fila-cartel { grid-column: 1; grid-row: 1 / 3; }
+  .fila-con-cartel > a, .fila-con-cartel > .sin-link { grid-column: 2; }
   .insta-grid { gap: 3px; }
 }

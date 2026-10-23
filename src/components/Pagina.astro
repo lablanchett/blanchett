@@ -105,10 +105,10 @@ const descripcion = `${lema} ${i.descripcionSufijo}`;
     <h2 class="seccion-titulo" id="titulo-fechas">{i.masPlanes}</h2>
     <ul class="lista">
       {resto.length ? resto.map((p) => (
-        <li class="fila">
-          <span class="fila-fecha">{dia(p, locale)}</span>
+        <li class:list={['fila', { 'fila-con-cartel': p.cartel }]}>
+          {p.cartel && <img class="fila-cartel" src={ruta(p.cartel)} alt={i.cartelAlt(p.nombre)} loading="lazy" decoding="async">}
           <span class="fila-detalle">
-            {p.cartel && <img class="fila-cartel" src={ruta(p.cartel)} alt={i.cartelAlt(p.nombre)} loading="lazy" decoding="async">}
+            <span class="fila-fecha">{dia(p, locale)}</span>
             {p.nombre}{p.con && ` ${i.con} ${p.con}`}
             {lugarDe(p) && (
               <><br><span class="fila-lugar">{p.direccion
