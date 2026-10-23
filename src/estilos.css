@@ -39,12 +39,18 @@ img { max-width: 100%; display: block; }
 }
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
   justify-content: space-between;
   align-items: center;
   margin-bottom: clamp(3rem, 9vw, 6.5rem);
 }
 .nav-monograma { width: 2.75rem; height: 2.75rem; }
 .nav a { text-decoration: none; }
+.nav-secciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; list-style: none; font-size: 0.9rem; }
+.nav-secciones a { color: var(--suave); }
+.nav-secciones a:hover { color: var(--lavanda); }
+#planes, #quienes-somos, #insta { scroll-margin-top: 1.5rem; }
 .nav-derecha {
   display: flex;
   align-items: center;
@@ -207,9 +213,22 @@ img { max-width: 100%; display: block; }
   padding-block: 1.25rem;
   border-bottom: 1px solid var(--linea);
 }
-.fila-con-cartel { grid-template-columns: 9rem minmax(0, 1fr) auto; }
-.fila-fecha { display: block; font-weight: 500; margin-bottom: 0.5rem; }
-.fila-detalle { min-width: 0; }
+.fila-con-cartel { grid-template-columns: 9rem minmax(0, 1fr); }
+.fila-fecha { font-size: 0.95rem; color: var(--suave); }
+.fila-detalle { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+.fila-nombre { font-size: 1.2rem; font-weight: 500; line-height: 1.3; }
+.fila .plan-descripcion { margin-top: 0; }
+.fila .fila-lugar { display: flex; flex-wrap: wrap; gap: 0.3rem 0.65rem; }
+.fila .fila-accion {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--lavanda);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.fila .fila-accion:hover { background: var(--lavanda); color: var(--negro); }
 .plan-descripcion {
   display: block;
   margin-top: 0.4rem;
@@ -385,13 +404,13 @@ img { max-width: 100%; display: block; }
 .pie a:hover { color: var(--texto); }
 
 @media (max-width: 40rem) {
+  .nav-secciones { order: 3; flex-basis: 100%; justify-content: flex-start; gap: 0.6rem 1.1rem; }
   .proxima, .proxima.con-cartel { grid-template-columns: 1fr; }
   .cartel { width: 60%; }
   .boton { text-align: center; width: 100%; }
   .fila { grid-template-columns: 1fr auto; }
   .fila { column-gap: 1rem; }
   .fila-con-cartel { grid-template-columns: 5.5rem minmax(0, 1fr); }
-  .fila-con-cartel .fila-cartel { grid-column: 1; grid-row: 1 / 3; }
-  .fila-con-cartel > a, .fila-con-cartel > .sin-link { grid-column: 2; }
+  .fila-con-cartel .fila-cartel { grid-column: 1; align-self: start; }
   .insta-grid { gap: 3px; }
 }

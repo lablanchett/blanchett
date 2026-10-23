@@ -50,6 +50,11 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
 <header class="portada contenedor">
   <nav class="nav" aria-label={i.navPrincipal}>
     <a href={getRelativeLocaleUrl(locale, '/')}><img class="nav-monograma" src={ruta('/logos/monograma.png')} alt={i.inicioAlt}></a>
+    <ul class="nav-secciones">
+      <li><a href="#planes">{i.menuPlanes}</a></li>
+      {quienesFrase && <li><a href="#quienes-somos">{i.quienesSomos}</a></li>}
+      {sitio.instagram && <li><a href={sitio.feedInstagram && sitio.fotosInstagram > 0 ? '#insta' : sitio.instagram}>Instagram</a></li>}
+    </ul>
     <div class="nav-derecha">
       <ul class="nav-idiomas" aria-label="Idioma / Language">
         {locales.map((l) => (
@@ -72,7 +77,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
   {explicacion && <p class="explicacion">{explicacion}</p>}
 </header>
 
-<main class="contenedor">
+<main class="contenedor" id="planes">
   <section class:list={['proxima', { 'con-cartel': primera && (primera.cartel || primera.video) }]} aria-labelledby="titulo-proxima">
     {primera ? (
       <>
@@ -119,19 +124,20 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
       {resto.length ? resto.map((p) => (
         <li class:list={['fila', { 'fila-con-cartel': p.cartel }]}>
           {p.cartel && <img class="fila-cartel" src={ruta(p.cartel)} alt={i.cartelAlt(p.nombre)} loading="lazy" decoding="async">}
-          <span class="fila-detalle">
-            <span class="fila-fecha">{dia(p, locale)}{horario(p, locale) && ` · ${horario(p, locale)}`}</span>
-            {p.nombre}{p.con && ` ${i.con} ${p.con}`}
-            {p.descripcion && <span class="plan-descripcion">{p.descripcion}</span>}
-            {lugarDe(p) && (
-              <><br><span class="fila-lugar">{p.direccion
-                ? <a href={mapa(p)} target="_blank" rel="noopener">{lugarDe(p)}</a>
-                : lugarDe(p)}</span></>
+          <div class="fila-detalle">
+            <h3 class="fila-nombre">{p.nombre}{p.con && ` ${i.con} ${p.con}`}</h3>
+            <p class="fila-fecha">{dia(p, locale)}{horario(p, locale) && ` · ${p.fin ? horario(p, locale) : p.hora}`}</p>
+            {p.descripcion && <p class="plan-descripcion">{p.descripcion}</p>}
+            {(p.lugar || p.direccion) && (
+              <p class="fila-lugar">
+                {p.lugar && <span>{p.lugar}</span>}
+                {p.direccion && <a href={mapa(p)} target="_blank" rel="noopener">{i.verMapa}</a>}
+              </p>
             )}
-          </span>
           {p.entradas
-            ? <a href={p.entradas} target="_blank" rel="noopener">{p.accion === 'apuntarme' ? i.apuntarme : i.entradas}</a>
-            : p.inicio ? <span class="sin-link">{i.pronto}</span> : <span></span>}
+            ? <a class="fila-accion" href={p.entradas} target="_blank" rel="noopener">{p.accion === 'apuntarme' ? i.apuntarme : i.entradas}</a>
+            : p.inicio ? <span class="sin-link">{i.pronto}</span> : null}
+          </div>
         </li>
       )) : <li class="vacio">{i.planesPronto}</li>}
     </ul>
@@ -140,7 +146,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
   {(quienesFrase || colaboraTexto) && (
     <section class="desplegables">
       {quienesFrase && (
-        <details class="desplegable">
+        <details class="desplegable" id="quienes-somos">
           <summary>{i.quienesSomos}</summary>
           <div class="desplegable-contenido">
             <p class="nosotras-frase">{quienesFrase}</p>
@@ -169,7 +175,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     <section class="insta" id="insta" aria-labelledby="titulo-insta" data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
       <div class="insta-cabecera">
         <h2 class="seccion-titulo" id="titulo-insta">{i.enInstagram}</h2>
-        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">{i.verPerfil}</a>}
+        {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram</a>}
       </div>
       <ul class="insta-grid" id="insta-grid">
         {Array.from({ length: sitio.fotosInstagram }, () => <li class="insta-hueco" aria-hidden="true"></li>)}
@@ -181,12 +187,29 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
 <footer class="pie contenedor">
   <span>© {new Date().getFullYear()} La Blanchett</span>
   <nav aria-label={i.redesContacto}>
-    {sitio.instagram && <a href={sitio.instagram} target="_blank" rel="noopener">Instagram</a>}
-    {sitio.email && <a href={`mailto:${sitio.email}`}>{sitio.email}</a>}
+    {sitio.instagram && (
+      <a class="nav-ig" href={sitio.instagram} target="_blank" rel="noopener" aria-label={i.igAria}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    )}
   </nav>
 </footer>
 
 <script define:vars={{ ACTIVAR_SONIDO: i.activarSonido, SILENCIAR: i.silenciar, INSTA_ALT_FALLBACK: i.instaAltFallback }}>
+  const abrirSeccion = () => {
+    if (location.hash === '#quienes-somos') {
+      const seccion = document.getElementById('quienes-somos');
+      if (seccion) seccion.open = true;
+    }
+  };
+  abrirSeccion();
+  window.addEventListener('hashchange', abrirSeccion);
+  document.querySelectorAll('a[href="#quienes-somos"]').forEach((enlace) => {
+    enlace.addEventListener('click', () => {
+      const seccion = document.getElementById('quienes-somos');
+      if (seccion) seccion.open = true;
+    });
+  });
   // Vídeo del plan destacado: suena solo si se pulsa el botón
   const MUDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
   const SONIDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
