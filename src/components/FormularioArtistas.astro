@@ -1,0 +1,21 @@
+---
+import { t, type Locale } from '../lib/i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const i = t(locale);
+const formulario = 'https://tally.so/r/jeaVy1';
+---
+      <div class="artistas-alternativa">
+        {locale !== 'es' && <span>{i.artistasIdioma}</span>}
+        <a href={formulario} target="_blank" rel="noopener">{i.artistasAbrir} ↗</a>
+      </div>
+      <div class="artistas-formulario">
+        <iframe
+          src="https://tally.so/embed/jeaVy1?alignLeft=1&hideTitle=1&dynamicHeight=1"
+          width="100%"
+          height="1050"
+          title={i.artistasTitulo}
+          loading="lazy"
+        ></iframe>
+      </div>
+<script is:inline async src="https://tally.so/widgets/embed.js"></script>

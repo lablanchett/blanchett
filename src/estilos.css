@@ -52,6 +52,8 @@ img { max-width: 100%; display: block; }
 .nav-secciones a:hover { color: var(--lavanda); }
 .nav-secciones a[aria-current="page"] { color: var(--texto); }
 #planes, #quienes-somos, #insta { scroll-margin-top: 1.5rem; }
+#participar { scroll-margin-top: 1.5rem; }
+.desplegable-contenido > .artistas-alternativa { margin-top: 1.5rem; }
 .nav-derecha {
   display: flex;
   align-items: center;

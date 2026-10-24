@@ -6,6 +6,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import sitio from '../lib/sitio';
 import Navegacion from './Navegacion.astro';
 import Pie from './Pie.astro';
+import FormularioArtistas from './FormularioArtistas.astro';
 import { prepararPlanes, dia, horario, mapa, ruta } from '../lib/planes';
 import { t, locales, type Locale } from '../lib/i18n';
 
@@ -122,7 +123,6 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     </ul>
   </section>
 
-  {(quienesFrase || colaboraTexto) && (
     <section class="desplegables">
       {quienesFrase && (
         <details class="desplegable" id="quienes-somos">
@@ -130,7 +130,6 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
           <div class="desplegable-contenido">
             <p class="nosotras-frase">{quienesFrase}</p>
             {quienesTexto && <p class="nosotras-texto">{quienesTexto}</p>}
-            <a class="colabora-enlace" href={getRelativeLocaleUrl(locale, 'artistas/')}>{i.artistasTitulo} &rarr;</a>
             <ul class="nosotras-cifras">
               <li><span class="nosotras-cifra">6</span><span class="nosotras-cifra-etiqueta">{i.cifraTardeo}</span></li>
               <li><span class="nosotras-cifra">3</span><span class="nosotras-cifra-etiqueta">{i.cifraIntima}</span></li>
@@ -148,8 +147,15 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
           </div>
         </details>
       )}
+      <details class="desplegable" id="participar">
+        <summary>{i.menuParticipar}</summary>
+        <div class="desplegable-contenido">
+          <h2 class="nosotras-frase">{i.artistasTitulo}</h2>
+          <p class="nosotras-texto">{i.artistasDescripcion}</p>
+          <FormularioArtistas locale={locale} />
+        </div>
+      </details>
     </section>
-  )}
 
   {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
     <section class="insta" id="insta" aria-label={i.enInstagram} data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
@@ -164,16 +170,16 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
 
 <script define:vars={{ ACTIVAR_SONIDO: i.activarSonido, SILENCIAR: i.silenciar, INSTA_ALT_FALLBACK: i.instaAltFallback }}>
   const abrirSeccion = () => {
-    if (location.hash === '#quienes-somos') {
-      const seccion = document.getElementById('quienes-somos');
+    if (['#quienes-somos', '#participar'].includes(location.hash)) {
+      const seccion = document.getElementById(location.hash.slice(1));
       if (seccion) seccion.open = true;
     }
   };
   abrirSeccion();
   window.addEventListener('hashchange', abrirSeccion);
-  document.querySelectorAll('a[href="#quienes-somos"]').forEach((enlace) => {
+  document.querySelectorAll('a[href="#quienes-somos"], a[href="#participar"]').forEach((enlace) => {
     enlace.addEventListener('click', () => {
-      const seccion = document.getElementById('quienes-somos');
+      const seccion = document.getElementById(enlace.getAttribute('href').slice(1));
       if (seccion) seccion.open = true;
     });
   });
