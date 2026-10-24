@@ -14,6 +14,7 @@ const quienesFrase = (locale === 'ca' && sitio.quienesFrase_ca) || (locale === '
     <ul class="nav-secciones">
       <li><a href={`${inicio}#planes`}>{i.menuPlanes}</a></li>
       {quienesFrase && <li><a href={`${inicio}#quienes-somos`}>{i.menuNosotras}</a></li>}
+      <li><a href={getRelativeLocaleUrl(locale, 'artistas/')} aria-current={pagina === 'artistas/' ? 'page' : undefined}>{i.menuParticipar}</a></li>
     </ul>
     <div class="nav-derecha">
       <ul class="nav-idiomas" aria-label="Idioma / Language">

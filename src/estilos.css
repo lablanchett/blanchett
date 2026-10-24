@@ -50,6 +50,7 @@ img { max-width: 100%; display: block; }
 .nav-secciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; list-style: none; font-size: 0.9rem; }
 .nav-secciones a { color: var(--suave); }
 .nav-secciones a:hover { color: var(--lavanda); }
+.nav-secciones a[aria-current="page"] { color: var(--texto); }
 #planes, #quienes-somos, #insta { scroll-margin-top: 1.5rem; }
 .nav-derecha {
   display: flex;
