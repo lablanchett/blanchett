@@ -37,7 +37,7 @@ const formulario = 'https://tally.so/r/o9bj9X';
     </header>
     <main class="contenedor artistas-contenido">
       <div class="artistas-alternativa">
-        <span>{i.artistasIdioma}</span>
+        {locale !== 'es' && <span>{i.artistasIdioma}</span>}
         <a href={formulario} target="_blank" rel="noopener">{i.artistasAbrir} ↗</a>
       </div>
       <div class="artistas-formulario">
