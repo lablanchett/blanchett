@@ -1,0 +1,56 @@
+---
+import '@fontsource-variable/montserrat';
+import '../estilos.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Navegacion from './Navegacion.astro';
+import Pie from './Pie.astro';
+import { ruta } from '../lib/planes';
+import { t, locales, type Locale } from '../lib/i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const i = t(locale);
+const sitioBase = Astro.site ?? new URL('https://lablanchett.com');
+const titulo = `${i.artistasTitulo} | La Blanchett`;
+const formulario = 'https://tally.so/r/o9bj9X';
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{titulo}</title>
+    <meta name="description" content={i.artistasDescripcion}>
+    <meta property="og:title" content={titulo}>
+    <meta property="og:description" content={i.artistasDescripcion}>
+    <meta property="og:image" content={new URL(ruta('/logos/la-blanchett.png'), sitioBase).href}>
+    <link rel="canonical" href={new URL(getRelativeLocaleUrl(locale, 'artistas/'), sitioBase).href}>
+    {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(getRelativeLocaleUrl(l, 'artistas/'), sitioBase).href}>)}
+    <link rel="icon" type="image/png" href={ruta('/favicon.png')}>
+    <link rel="apple-touch-icon" href={ruta('/apple-touch-icon.png')}>
+  </head>
+  <body>
+    <header class="portada contenedor artistas-cabecera">
+      <Navegacion locale={locale} pagina="artistas/" />
+      <h1 class="artistas-titulo">{i.artistasTitulo}</h1>
+      <p class="nosotras-texto">{i.artistasDescripcion}</p>
+    </header>
+    <main class="contenedor artistas-contenido">
+      <div class="artistas-alternativa">
+        <span>{i.artistasIdioma}</span>
+        <a href={formulario} target="_blank" rel="noopener">{i.artistasAbrir} ↗</a>
+      </div>
+      <div class="artistas-formulario">
+        <iframe
+          src="https://tally.so/embed/o9bj9X?alignLeft=1&hideTitle=1&dynamicHeight=1"
+          width="100%"
+          height="1050"
+          title={i.artistasTitulo}
+          loading="lazy"
+        ></iframe>
+      </div>
+    </main>
+    <Pie locale={locale} />
+    <script is:inline async src="https://tally.so/widgets/embed.js"></script>
+  </body>
+</html>

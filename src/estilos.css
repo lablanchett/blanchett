@@ -388,6 +388,15 @@ img { max-width: 100%; display: block; }
   .insta-grid a:hover img { transform: none; }
 }
 
+/* Propuestas artísticas */
+.artistas-cabecera { padding-bottom: 2rem; }
+.artistas-titulo { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 500; line-height: 1.15; }
+.artistas-contenido { padding-bottom: 4rem; }
+.artistas-alternativa { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem 1.5rem; color: var(--suave); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.artistas-alternativa a { color: var(--lavanda); text-underline-offset: 0.25em; }
+.artistas-formulario { max-width: 52rem; margin-inline: auto; background: #fff; color-scheme: light; border-radius: 8px; padding: clamp(0.75rem, 3vw, 2rem); }
+.artistas-formulario iframe { display: block; width: 100%; border: 0; }
+
 /* Pie */
 .pie {
   border-top: 1px solid var(--linea);

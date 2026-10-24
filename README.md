@@ -17,6 +17,16 @@ Entra en **https://app.pagescms.org**, elige este repositorio y edita **Planes**
 | Diseño de la página | `src/pages/index.astro`, `src/estilos.css` |
 | Configuración del editor | `.pages.yml` |
 | Publicación automática | `.github/workflows/publicar.yml` |
+| Página de artistas y formulario Tally | `src/components/Artistas.astro` |
+| Navegación y pie compartidos | `src/components/Navegacion.astro`, `src/components/Pie.astro` |
+
+## Propuestas artísticas
+
+El enlace «¿Hacés arte?» dentro de «Nosotras» abre `/artistas/` (también `/ca/artistas/` y `/en/artistas/`).
+La página integra https://tally.so/r/o9bj9X y ofrece un enlace directo como alternativa.
+Las respuestas, las preguntas, el aviso de privacidad y el diseño interno se gestionan en Tally; no se guardan en este repositorio.
+La página exterior está traducida, pero el formulario actual está en español en los tres idiomas.
+El script oficial de Tally ajusta la altura del formulario; el iframe también carga sin JavaScript.
 
 ## Publicación
 
