@@ -1,6 +1,6 @@
 ---
 nombre: Bollos a Pie
-publicado: true
+publicado: false
 tipo: Senderismo
 destacado: false
 descripcion: Ruta por Gualba-Montseny, plancito Gratis!
