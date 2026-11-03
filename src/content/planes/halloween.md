@@ -1,6 +1,6 @@
 ---
 nombre: ¡Halloween!
-publicado: false
+publicado: true
 destacado: false
 con: DJ Anabel
 fecha: 2026-10-30
