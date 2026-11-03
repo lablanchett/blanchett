@@ -1,6 +1,6 @@
 ---
 nombre: Bollos a Pie
-publicado: false
+publicado: true
 tipo: Senderismo
 destacado: false
 accion: apuntarme
