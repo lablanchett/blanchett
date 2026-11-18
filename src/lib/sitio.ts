@@ -4,6 +4,18 @@ import datos from '../data/sitio.json';
 // src/data/sitio.json lo edita el equipo desde Pages CMS o a mano: validamos aquí
 // porque el CMS no protege ediciones directas al archivo.
 const esquema = z.object({
+  quienesTitulo: z.string().trim().default(''),
+  quienesTitulo_ca: z.string().trim().default(''),
+  quienesTitulo_en: z.string().trim().default(''),
+  colaboraTitulo: z.string().trim().default(''),
+  colaboraTitulo_ca: z.string().trim().default(''),
+  colaboraTitulo_en: z.string().trim().default(''),
+  participarTitulo: z.string().trim().default(''),
+  participarTitulo_ca: z.string().trim().default(''),
+  participarTitulo_en: z.string().trim().default(''),
+  artistasTitulo: z.string().trim().default(''),
+  artistasTitulo_ca: z.string().trim().default(''),
+  artistasTitulo_en: z.string().trim().default(''),
   lema: z.string().trim().default(''),
   lema_ca: z.string().trim().default(''),
   lema_en: z.string().trim().default(''),

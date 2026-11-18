@@ -1,3 +1,5 @@
+import sitio from './sitio';
+
 export const locales = ['es', 'ca', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'es';
@@ -30,7 +32,7 @@ const textos = {
     menuPlanes: 'Agenda',
     menuNosotras: 'Nosotras',
     menuParticipar: 'Participar',
-    artistasTitulo: '¿Hacés arte?',
+    artistasTitulo: '¿Sos artista?',
     artistasDescripcion: 'Compartí tu propuesta artística para próximas ediciones de La Blanchett en Barcelona.',
     artistasAbrir: 'Abrir el formulario en otra pestaña',
     artistasIdioma: 'El formulario está en español.',
@@ -74,7 +76,7 @@ const textos = {
     menuPlanes: 'Agenda',
     menuNosotras: 'Nosaltres',
     menuParticipar: 'Participar',
-    artistasTitulo: 'Fas art?',
+    artistasTitulo: 'Ets artista?',
     artistasDescripcion: 'Comparteix la teva proposta artística per a properes edicions de La Blanchett a Barcelona.',
     artistasAbrir: 'Obrir el formulari en una altra pestanya',
     artistasIdioma: 'El formulari és en castellà.',
@@ -118,7 +120,7 @@ const textos = {
     menuPlanes: 'Events',
     menuNosotras: 'About us',
     menuParticipar: 'Get involved',
-    artistasTitulo: 'Do you make art?',
+    artistasTitulo: 'Are you an artist?',
     artistasDescripcion: 'Share your artistic proposal for upcoming editions of La Blanchett in Barcelona.',
     artistasAbrir: 'Open the form in a new tab',
     artistasIdioma: 'The form is in Spanish.',
@@ -144,5 +146,14 @@ const textos = {
 } satisfies Record<Locale, Record<string, unknown>>;
 
 export function t(locale: Locale) {
-  return textos[locale];
+  const texto = textos[locale];
+  const sufijo = locale === defaultLocale ? '' : `_${locale}` as const;
+
+  return {
+    ...texto,
+    quienesSomos: sitio[`quienesTitulo${sufijo}`] || texto.quienesSomos,
+    colabora: sitio[`colaboraTitulo${sufijo}`] || texto.colabora,
+    participarTitulo: sitio[`participarTitulo${sufijo}`] || texto.menuParticipar,
+    artistasTitulo: sitio[`artistasTitulo${sufijo}`] || texto.artistasTitulo,
+  };
 }

@@ -154,6 +154,42 @@ content:
         label: Short summary (English)
         type: text
         description: Optional. If left empty, the Spanish text is used on the English version.
+      - name: quienesTitulo
+        label: "Título del desplegable «Quiénes somos» (castellano)"
+        type: string
+      - name: quienesTitulo_ca
+        label: "Título del desplegable «Quiénes somos» (català)"
+        type: string
+      - name: quienesTitulo_en
+        label: "Título del desplegable «Quiénes somos» (English)"
+        type: string
+      - name: colaboraTitulo
+        label: "Título del desplegable «¿Tenés un espacio?» (castellano)"
+        type: string
+      - name: colaboraTitulo_ca
+        label: "Título del desplegable «¿Tenés un espacio?» (català)"
+        type: string
+      - name: colaboraTitulo_en
+        label: "Título del desplegable «¿Tenés un espacio?» (English)"
+        type: string
+      - name: participarTitulo
+        label: "Título del desplegable «Participar» (castellano)"
+        type: string
+      - name: participarTitulo_ca
+        label: "Título del desplegable «Participar» (català)"
+        type: string
+      - name: participarTitulo_en
+        label: "Título del desplegable «Participar» (English)"
+        type: string
+      - name: artistasTitulo
+        label: "Título de la convocatoria de artistas (castellano)"
+        type: string
+      - name: artistasTitulo_ca
+        label: "Título de la convocatoria de artistas (català)"
+        type: string
+      - name: artistasTitulo_en
+        label: "Título de la convocatoria de artistas (English)"
+        type: string
       - name: quienesFrase
         label: "Quiénes somos: frase destacada (castellano)"
         type: string
