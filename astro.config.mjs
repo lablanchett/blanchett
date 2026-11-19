@@ -11,6 +11,19 @@ export default defineConfig({
   site: process.env.SITE_URL || 'https://lablanchett.com',
   base: process.env.BASE_PATH || '/',
   trailingSlash: 'ignore',
+  markdown: { syntaxHighlight: false },
+  security: {
+    csp: {
+      scriptDirective: { resources: ["'self'"] },
+      directives: [
+        "default-src 'self'",
+        "base-uri 'self'",
+        "object-src 'none'",
+        "img-src 'self' https:",
+        "media-src 'self' https:",
+      ],
+    },
+  },
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'ca', 'en'],

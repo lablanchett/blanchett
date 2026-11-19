@@ -85,7 +85,7 @@ content:
         label: Enlace de entradas o formulario
         type: string
         pattern:
-          regex: "^$|^https?://"
+          regex: "^$|^https://"
           message: "Pega el enlace completo, empezando por https://"
         description: "Pega el enlace completo de Entradium o del formulario, incluidos sus parámetros si los necesita."
       - name: accion
@@ -109,6 +109,52 @@ content:
           categories: [video]
         description: "Opcional. Sustituye al cartel en el plan destacado. MP4 vertical de menos de 10 MB."
 
+  - name: albumes
+    label: Álbumes de fotos
+    type: collection
+    path: src/content/albumes
+    format: json
+    filename: "{primary}.json"
+    operations:
+      create: true
+      delete: true
+    view:
+      primary: titulo
+      fields: [titulo, evento, publicado]
+    fields:
+      - name: titulo
+        label: Título del álbum
+        type: string
+        required: true
+      - name: evento
+        label: Evento
+        type: reference
+        required: true
+        options:
+          collection: planes
+          value: "{path}"
+          label: "{primary}"
+      - name: publicado
+        label: Mostrar álbum en la galería
+        type: boolean
+        default: false
+        description: Los archivos subidos a Media son públicos aunque el álbum esté oculto. Subí únicamente fotos aprobadas para su publicación.
+      - name: portada
+        label: Foto de portada
+        type: image
+        description: Si la dejás vacía, se usa la primera foto del álbum.
+        options:
+          path: public/media/albumes
+      - name: fotos
+        label: Fotos del álbum
+        type: image
+        required: true
+        description: Subí solo fotos aprobadas y sin metadatos de ubicación. Podés reordenarlas o quitarlas del álbum. Los archivos se gestionan desde Media.
+        options:
+          path: public/media/albumes
+          multiple:
+            min: 1
+          unique: true
   - name: sitio
     label: Datos de la web
     type: file

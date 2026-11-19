@@ -11,9 +11,9 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/montserrat": "5.2.8",
-    "astro": "5.18.2"
+    "astro": "7.4.12"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.23.4"
   }
 }

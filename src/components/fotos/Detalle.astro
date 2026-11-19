@@ -1,0 +1,168 @@
+---
+import '@fontsource-variable/montserrat';
+import '../../estilos.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Pie from '../Pie.astro';
+import Navegacion from '../Navegacion.astro';
+import MetadatosFotos from '../MetadatosFotos.astro';
+import { type Album } from '../../lib/albumes';
+import { type Locale } from '../../lib/i18n';
+import { ruta } from '../../lib/planes';
+import { textosFotos } from '../../lib/textosFotos';
+
+const { album, locale } = Astro.props as { album: Album; locale: Locale };
+const i = textosFotos[locale];
+const pagina = `fotos/${album.id}/`;
+const fotos = album.fotos.map((foto, indice) => ({
+  numero: indice + 1,
+  url: ruta(foto),
+  archivo: foto.split('/').at(-1),
+}));
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <MetadatosFotos locale={locale} pagina={pagina} titulo={album.titulo} descripcion={i.descripcion} portada={album.portada} />
+  </head>
+  <body>
+    <header class="portada contenedor">
+      <Navegacion locale={locale} pagina={pagina} />
+      <a class="volver" href={getRelativeLocaleUrl(locale, 'fotos/')}>{i.volver}</a>
+    </header>
+    <main class="contenedor">
+      <section aria-labelledby="titulo-album">
+        <div class="portada-album">
+          <img src={ruta(album.portada)} alt="">
+          <div class="titulo-album">
+            <h1 id="titulo-album">{album.titulo}</h1>
+            <a href="#fotos-del-album">{fotos.length} {fotos.length === 1 ? i.una : i.varias} ↓</a>
+          </div>
+        </div>
+        <ul class="fotos" id="fotos-del-album" aria-label={i.lista}>
+          {fotos.map(({ numero, url, archivo }) => (
+            <li>
+              <a href={url} data-foto data-archivo={archivo} data-alt={i.fotoDelAlbum(numero)} aria-label={`${i.abrir} ${numero}`}>
+                <img src={url} alt="" loading="lazy" decoding="async">
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
+    <dialog aria-label={i.visor}>
+      <div class="visor-controles">
+        <span id="contador" aria-live="polite"></span>
+        <form method="dialog"><button autofocus>{i.cerrar} ×</button></form>
+      </div>
+      <img id="foto-ampliada" alt="">
+      <div class="visor-controles">
+        <button type="button" id="anterior" aria-label={i.anterior}>←</button>
+        <a id="descarga" download>{i.descargar}</a>
+        <button type="button" id="siguiente" aria-label={i.siguiente}>→</button>
+      </div>
+    </dialog>
+    <Pie locale={locale} />
+  </body>
+</html>
+
+<script>
+  const visor = document.querySelector<HTMLDialogElement>('dialog')!;
+  const foto = document.querySelector<HTMLImageElement>('#foto-ampliada')!;
+  const contador = document.querySelector('#contador')!;
+  const descarga = document.querySelector<HTMLAnchorElement>('#descarga')!;
+  const fotos = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-foto]'));
+  let indice = 0;
+
+  function mostrar(posicion: number) {
+    indice = (posicion + fotos.length) % fotos.length;
+    const { href, dataset } = fotos[indice];
+    const numero = indice + 1;
+    foto.src = href;
+    foto.alt = dataset.alt ?? '';
+    contador.textContent = `${numero} / ${fotos.length}`;
+    descarga.href = href;
+    descarga.download = dataset.archivo ?? '';
+  }
+
+  fotos.forEach((enlace, posicion) => {
+    enlace.addEventListener('click', (evento) => {
+      if (evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
+      evento.preventDefault();
+      mostrar(posicion);
+      visor.showModal();
+    });
+  });
+  document.querySelector('#anterior')?.addEventListener('click', () => mostrar(indice - 1));
+  document.querySelector('#siguiente')?.addEventListener('click', () => mostrar(indice + 1));
+  visor.addEventListener('keydown', (evento) => {
+    if (evento.key === 'ArrowLeft') mostrar(indice - 1);
+    if (evento.key === 'ArrowRight') mostrar(indice + 1);
+  });
+</script>
+
+<style>
+  .visor-controles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .portada { padding-bottom: 1rem; }
+  .volver { font-size: .875rem; color: var(--lavanda); }
+  .portada-album {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: clamp(19rem, 47vw, 30rem);
+    isolation: isolate;
+    background: var(--linea);
+  }
+  .portada-album img, .portada-album::after {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .portada-album img { z-index: -2; object-fit: cover; }
+  .portada-album::after {
+    content: '';
+    z-index: -1;
+    background: linear-gradient(0deg, #08050aed, #08050a00 95%);
+  }
+  .titulo-album { padding: clamp(1.25rem, 5vw, 3rem); }
+  h1 { margin-block: .3rem .7rem; font-size: clamp(1.65rem, 5vw, 3.25rem); line-height: 1.14; }
+  .fotos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(.5rem, 1.6vw, 1.25rem);
+    list-style: none;
+    padding-block: 1.4rem 4rem;
+  }
+  .fotos a { display: block; }
+  .fotos img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--linea); }
+  .fotos a:hover img { opacity: .8; }
+  dialog {
+    width: min(92vw, 68rem);
+    margin: auto;
+    padding: clamp(.65rem, 2vw, 1.25rem);
+    border: 1px solid var(--linea);
+    background: #100d13;
+    color: var(--texto);
+  }
+  dialog::backdrop { background: #000d; }
+  #foto-ampliada { width: 100%; height: min(66dvh, 44rem); object-fit: contain; margin-block: .75rem; }
+  .visor-controles button, .visor-controles a {
+    display: inline-block;
+    padding: .5rem .75rem;
+    border: 1px solid var(--linea);
+    border-radius: .25rem;
+    background: transparent;
+    color: var(--texto);
+    font: inherit;
+    font-size: .875rem;
+    cursor: pointer;
+  }
+  .visor-controles a { background: var(--lavanda); color: var(--negro); text-decoration: none; }
+  #contador { color: var(--lavanda); font-size: .875rem; }
+  @media (max-width: 37rem) { .fotos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

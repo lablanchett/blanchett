@@ -1,0 +1,13 @@
+---
+import Detalle from '../../../components/fotos/Detalle.astro';
+import { obtenerAlbumes } from '../../../lib/albumes';
+import { defaultLocale, locales } from '../../../lib/i18n';
+
+export async function getStaticPaths() {
+  const albumes = await obtenerAlbumes();
+  return locales.filter((locale) => locale !== defaultLocale).flatMap((locale) =>
+    albumes.map((album) => ({ params: { idioma: locale, album: album.id }, props: { locale, album } }))
+  );
+}
+---
+<Detalle locale={Astro.props.locale} album={Astro.props.album} />

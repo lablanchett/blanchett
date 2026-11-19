@@ -7,6 +7,7 @@ import sitio from '../lib/sitio';
 import Navegacion from './Navegacion.astro';
 import Pie from './Pie.astro';
 import FormularioArtistas from './FormularioArtistas.astro';
+import { archivoDelPlan, obtenerAlbumes } from '../lib/albumes';
 import { prepararPlanes, dia, horario, mapa, ruta } from '../lib/planes';
 import { t, locales, type Locale } from '../lib/i18n';
 
@@ -16,7 +17,19 @@ interface Props {
 const { locale } = Astro.props;
 const i = t(locale);
 
-const planes = prepararPlanes(await getCollection('planes'), locale);
+const [entradas, albumes] = await Promise.all([getCollection('planes'), obtenerAlbumes()]);
+const ahora = new Date();
+const planes = prepararPlanes(entradas, locale, ahora);
+const archivosPorId = new Map(entradas.map((plan) => [plan.id, archivoDelPlan(plan)]));
+const pasados = new Map(prepararPlanes(entradas, locale, new Date(0))
+  .filter((plan) => plan.final && plan.final <= ahora)
+  .map((plan) => [archivosPorId.get(plan.id), plan]));
+const albumesPasados = albumes.filter((album) => pasados.has(album.evento));
+const agendaFotos = {
+  es: { titulo: 'Eventos pasados', enlace: 'Ver fotos' },
+  ca: { titulo: 'Esdeveniments passats', enlace: 'Veure fotos' },
+  en: { titulo: 'Past events', enlace: 'View photos' },
+}[locale];
 const primera = planes.find((p) => p.destacado) ?? planes[0];
 const resto = planes.filter((p) => p !== primera);
 const lugarDe = (p: (typeof planes)[number]) => [p.tipo, p.lugar].filter(Boolean).join(', ');
@@ -30,6 +43,10 @@ const descripcion = explicacion || `${lema} ${i.descripcionSufijo}`;
 const titulo = tituloSeo ? `${tituloSeo} | La Blanchett` : `La Blanchett — ${lema}`;
 const sitioBase = Astro.site ?? new URL('https://lablanchett.com');
 const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
+const feed = URL.canParse(sitio.feedInstagram) ? new URL(sitio.feedInstagram) : null;
+if (feed?.protocol === 'https:' && sitio.fotosInstagram > 0) {
+  Astro.csp?.insertDirective(`connect-src 'self' ${feed.origin}`);
+}
 ---
 <!doctype html>
 <html lang={locale}>
@@ -48,7 +65,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     <link rel="alternate" hreflang={l} href={new URL(getRelativeLocaleUrl(l, '/'), sitioBase).href}>
   ))}
 </head>
-<body>
+<body data-activar-sonido={i.activarSonido} data-silenciar={i.silenciar} data-insta-alt={i.instaAltFallback}>
 
 <header class="portada contenedor">
   <Navegacion locale={locale} />
@@ -63,8 +80,8 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
       <>
         {primera.video ? (
           <div class="media">
-            <video src={ruta(primera.video)} poster={primera.cartel ? ruta(primera.cartel) : undefined} muted loop playsinline preload="metadata" aria-label={i.videoAria(primera.nombre)}></video>
-            <button class="sonido" type="button" aria-label={i.activarSonido}></button>
+            <video src={ruta(primera.video)} poster={primera.cartel ? ruta(primera.cartel) : undefined} muted loop playsinline controls preload="metadata" aria-label={i.videoAria(primera.nombre)}></video>
+            <button class="sonido" type="button" hidden aria-label={i.activarSonido}></button>
           </div>
         ) : primera.cartel ? (
           <img class="cartel" src={ruta(primera.cartel)} alt={i.cartelAlt(primera.nombre)}>
@@ -123,6 +140,22 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
     </ul>
   </section>
 
+  {albumesPasados.length > 0 && (
+    <section class="fechas" aria-labelledby="titulo-eventos-pasados">
+      <h2 class="seccion-titulo" id="titulo-eventos-pasados">{agendaFotos.titulo}</h2>
+      <ul class="lista">
+        {albumesPasados.map((album) => (
+          <li class="fila">
+            <div class="fila-detalle">
+              <h3 class="fila-nombre">{pasados.get(album.evento)?.nombre}</h3>
+              <a class="fila-accion" href={getRelativeLocaleUrl(locale, `fotos/${album.id}/`)} aria-label={`${agendaFotos.enlace}: ${album.titulo}`}>{agendaFotos.enlace}</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
     <section class="desplegables">
       {quienesFrase && (
         <details class="desplegable" id="quienes-somos">
@@ -157,7 +190,7 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
       </details>
     </section>
 
-  {sitio.feedInstagram && sitio.fotosInstagram > 0 && (
+  {feed?.protocol === 'https:' && sitio.fotosInstagram > 0 && (
     <section class="insta" id="insta" aria-label={i.enInstagram} data-feed={sitio.feedInstagram} data-n={sitio.fotosInstagram}>
       <ul class="insta-grid" id="insta-grid">
         {Array.from({ length: sitio.fotosInstagram }, () => <li class="insta-hueco" aria-hidden="true"></li>)}
@@ -168,50 +201,52 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
 
 <Pie locale={locale} />
 
-<script define:vars={{ ACTIVAR_SONIDO: i.activarSonido, SILENCIAR: i.silenciar, INSTA_ALT_FALLBACK: i.instaAltFallback }}>
+<script>
+  const { activarSonido, silenciar, instaAlt } = document.body.dataset;
   const abrirSeccion = () => {
     if (['#quienes-somos', '#participar'].includes(location.hash)) {
       const seccion = document.getElementById(location.hash.slice(1));
-      if (seccion) seccion.open = true;
+      if (seccion instanceof HTMLDetailsElement) seccion.open = true;
     }
   };
   abrirSeccion();
   window.addEventListener('hashchange', abrirSeccion);
   document.querySelectorAll('a[href="#quienes-somos"], a[href="#participar"]').forEach((enlace) => {
     enlace.addEventListener('click', () => {
-      const seccion = document.getElementById(enlace.getAttribute('href').slice(1));
-      if (seccion) seccion.open = true;
+      const seccion = document.getElementById(enlace.getAttribute('href')?.slice(1) ?? '');
+      if (seccion instanceof HTMLDetailsElement) seccion.open = true;
     });
   });
   // Vídeo del plan destacado: suena solo si se pulsa el botón
   const MUDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
   const SONIDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
-  const video = document.querySelector('.media video');
-  const boton = document.querySelector('.sonido');
+  const video = document.querySelector<HTMLVideoElement>('.media video');
+  const boton = document.querySelector<HTMLButtonElement>('.sonido');
   if (video && boton) {
     boton.innerHTML = MUDO;
-    const usarControles = () => { video.controls = true; boton.hidden = true; };
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) usarControles();
-    else video.play().catch(usarControles);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      video.play().then(() => { video.controls = false; boton.hidden = false; }).catch(() => {});
+    }
     boton.addEventListener('click', () => {
       video.muted = !video.muted;
       if (!video.muted) video.play();
       boton.innerHTML = video.muted ? MUDO : SONIDO;
-      boton.setAttribute('aria-label', video.muted ? ACTIVAR_SONIDO : SILENCIAR);
+      const etiqueta = video.muted ? activarSonido : silenciar;
+      if (etiqueta) boton.setAttribute('aria-label', etiqueta);
     });
   }
 
   // Feed de Instagram (Behold)
   const seccion = document.getElementById('insta');
   const grid = document.getElementById('insta-grid');
-  if (seccion && grid) {
+  if (seccion?.dataset.feed && grid) {
     const n = Number(seccion.dataset.n) || 6;
     const ICONOS = {
       VIDEO: '<svg class="insta-tipo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
       CAROUSEL_ALBUM: '<svg class="insta-tipo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>',
     };
     // Solo aceptamos URLs https: evita que un feed comprometido inyecte "javascript:" u otros esquemas.
-    const urlSegura = (u) => { try { const url = new URL(String(u)); return url.protocol === 'https:' ? url.href : null; } catch { return null; } };
+    const urlSegura = (u: unknown) => { try { const url = new URL(String(u)); return url.protocol === 'https:' ? url.href : null; } catch { return null; } };
     fetch(seccion.dataset.feed)
       .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
       .then((datos) => {
@@ -222,13 +257,15 @@ const imagenRespaldo = new URL(ruta('/logos/la-blanchett.png'), sitioBase).href;
           const src = urlSegura((tam && tam.mediaUrl) || (p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl));
           const href = urlSegura(p.permalink);
           if (!src || !href) return;
-          const alt = String(p.altText || p.prunedCaption || p.caption || INSTA_ALT_FALLBACK).slice(0, 140);
+          const alt = String(p.altText || p.prunedCaption || p.caption || instaAlt || '').slice(0, 140);
 
           const a = document.createElement('a');
           a.href = href;
           a.target = '_blank';
           a.rel = 'noopener';
-          if (ICONOS[p.mediaType]) a.insertAdjacentHTML('afterbegin', ICONOS[p.mediaType]);
+          if (p.mediaType === 'VIDEO' || p.mediaType === 'CAROUSEL_ALBUM') {
+            a.insertAdjacentHTML('afterbegin', ICONOS[p.mediaType]);
+          }
 
           const img = document.createElement('img');
           img.loading = 'lazy';

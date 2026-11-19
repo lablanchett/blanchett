@@ -1,0 +1,65 @@
+---
+import '@fontsource-variable/montserrat';
+import '../../estilos.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Navegacion from '../Navegacion.astro';
+import Pie from '../Pie.astro';
+import MetadatosFotos from '../MetadatosFotos.astro';
+import { obtenerAlbumes } from '../../lib/albumes';
+import { type Locale } from '../../lib/i18n';
+import { ruta } from '../../lib/planes';
+import { textosFotos } from '../../lib/textosFotos';
+
+const { locale } = Astro.props as { locale: Locale };
+const i = textosFotos[locale];
+const albumes = await obtenerAlbumes();
+const formatoFecha = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
+
+function fechaDe(fecha: string) {
+  const dia = new Date(`${fecha}T00:00:00Z`);
+  return Number.isNaN(dia.getTime()) ? '' : formatoFecha.format(dia);
+}
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <MetadatosFotos locale={locale} pagina="fotos/" titulo={i.titulo} descripcion={i.descripcion} />
+  </head>
+  <body>
+    <header class="portada contenedor">
+      <Navegacion locale={locale} pagina="fotos/" />
+      <h1>{i.titulo}</h1>
+    </header>
+    <main class="contenedor">
+      {albumes.length ? (
+        <ul>
+          {albumes.map((album) => (
+            <li>
+              <a href={getRelativeLocaleUrl(locale, `fotos/${album.id}/`)}>
+                <img src={ruta(album.portada)} alt="" loading="lazy" decoding="async">
+                <div>
+                  <h2>{album.titulo}</h2>
+                  <p>{[album.tipo, fechaDe(album.fecha), `${album.fotos.length} ${album.fotos.length === 1 ? i.una : i.varias}`].filter(Boolean).join(' · ')}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : <p>{i.vacio}</p>}
+    </main>
+    <Pie locale={locale} />
+  </body>
+</html>
+
+<style>
+  h1 { font-size: clamp(2.5rem, 7vw, 5rem); line-height: 1; }
+  main { padding-bottom: 4rem; }
+  ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.5rem; list-style: none; }
+  li { min-width: 0; }
+  li a { display: block; max-width: 36rem; text-decoration: none; border: 1px solid var(--linea); }
+  li a:hover { border-color: var(--lavanda); }
+  img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--linea); }
+  li div { padding: 1rem; }
+  h2 { font-size: clamp(1.2rem, 3.5vw, 1.7rem); line-height: 1.2; }
+  li p { margin-top: .4rem; color: var(--lavanda); font-size: .875rem; }
+</style>

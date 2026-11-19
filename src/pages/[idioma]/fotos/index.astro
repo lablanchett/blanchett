@@ -1,0 +1,12 @@
+---
+import Indice from '../../../components/fotos/Indice.astro';
+import { defaultLocale, locales } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+  return locales.filter((locale) => locale !== defaultLocale).map((locale) => ({
+    params: { idioma: locale },
+    props: { locale },
+  }));
+}
+---
+<Indice locale={Astro.props.locale} />

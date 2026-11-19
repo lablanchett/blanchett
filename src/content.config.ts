@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 // Pages CMS puede guardar campos vacíos como "" o null: los tratamos como "sin valor".
 const texto = z.preprocess(
@@ -16,8 +17,8 @@ const fecha = z.preprocess((v) => {
 
 // Enlaces editables: la validación del CMS (.pages.yml) no protege ediciones hechas
 // directamente en los archivos, así que la repetimos aquí.
-const url = texto.refine((v) => v === '' || /^https?:\/\//.test(v), {
-  message: 'Debe ser un enlace que empiece por http:// o https://',
+const url = texto.refine((v) => v === '' || /^https:\/\//.test(v), {
+  message: 'Debe ser un enlace que empiece por https://',
 });
 
 const planes = defineCollection({

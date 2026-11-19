@@ -185,6 +185,7 @@ img { max-width: 100%; display: block; }
   backdrop-filter: blur(6px);
 }
 .sonido svg { width: 1.1rem; height: 1.1rem; }
+.sonido[hidden], .artistas-formulario iframe[hidden] { display: none; }
 .boton {
   display: inline-block;
   background: var(--lavanda);

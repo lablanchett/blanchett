@@ -1,0 +1,20 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { locales, type Locale } from '../lib/i18n';
+import { ruta } from '../lib/planes';
+interface Props { locale: Locale; pagina: string; titulo: string; descripcion: string; portada?: string }
+const { locale, pagina, titulo, descripcion, portada = '/logos/la-blanchett.png' } = Astro.props;
+const sitio = Astro.site ?? Astro.url;
+const url = (idioma: Locale) => new URL(getRelativeLocaleUrl(idioma, pagina), sitio);
+---
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{titulo} | La Blanchett</title>
+<meta name="description" content={descripcion}>
+<meta property="og:title" content={`${titulo} | La Blanchett`}>
+<meta property="og:description" content={descripcion}>
+<meta property="og:image" content={new URL(ruta(portada), sitio)}>
+<meta property="og:url" content={url(locale)}>
+<link rel="canonical" href={url(locale)}>
+{locales.map((idioma) => <link rel="alternate" hreflang={idioma} href={url(idioma)}>)}
+<link rel="icon" href={ruta('/favicon.png')}>

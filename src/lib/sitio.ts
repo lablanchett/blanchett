@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 import datos from '../data/sitio.json';
 
 // src/data/sitio.json lo edita el equipo desde Pages CMS o a mano: validamos aquí

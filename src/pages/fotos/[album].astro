@@ -1,0 +1,9 @@
+---
+import Detalle from '../../components/fotos/Detalle.astro';
+import { obtenerAlbumes } from '../../lib/albumes';
+
+export async function getStaticPaths() {
+  return (await obtenerAlbumes()).map((album) => ({ params: { album: album.id }, props: { album } }));
+}
+---
+<Detalle locale="es" album={Astro.props.album} />
