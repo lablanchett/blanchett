@@ -1,0 +1,22 @@
+{
+  "titulo": "VOL #1",
+  "evento": "src/content/planes/intima-e-interactiva.md",
+  "publicado": true,
+  "portada": "/media/albumes/8.jpg",
+  "fotos": [
+    "/media/albumes/1.jpg",
+    "/media/albumes/2.jpg",
+    "/media/albumes/3.jpg",
+    "/media/albumes/4.jpg",
+    "/media/albumes/5.jpg",
+    "/media/albumes/6.jpg",
+    "/media/albumes/7.jpg",
+    "/media/albumes/9.jpg",
+    "/media/albumes/10.jpg",
+    "/media/albumes/11.jpg",
+    "/media/albumes/12.jpg",
+    "/media/albumes/13.jpg",
+    "/media/albumes/14.jpg",
+    "/media/albumes/15.jpg"
+  ]
+}
