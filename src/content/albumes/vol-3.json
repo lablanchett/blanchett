@@ -1,0 +1,26 @@
+{
+  "titulo": "VOL #3",
+  "evento": "src/content/planes/intima-e-interactiva.md",
+  "publicado": true,
+  "portada": "/media/albumes/17.jpg",
+  "fotos": [
+    "/media/albumes/1-2.jpg",
+    "/media/albumes/10-2.jpg",
+    "/media/albumes/19.jpg",
+    "/media/albumes/28.jpg",
+    "/media/albumes/37.jpg",
+    "/media/albumes/2-1.jpg",
+    "/media/albumes/11-1.jpg",
+    "/media/albumes/20.jpg",
+    "/media/albumes/29.jpg",
+    "/media/albumes/38.jpg",
+    "/media/albumes/3-1.jpg",
+    "/media/albumes/12-1.jpg",
+    "/media/albumes/21.jpg",
+    "/media/albumes/30.jpg",
+    "/media/albumes/39.jpg",
+    "/media/albumes/14-1.jpg",
+    "/media/albumes/35.jpg",
+    "/media/albumes/44.jpg"
+  ]
+}
