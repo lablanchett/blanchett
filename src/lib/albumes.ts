@@ -6,7 +6,7 @@ export interface Album {
   titulo: string;
   evento: string;
   fecha: string;
-  tipo: string;
+  nombreEvento: string;
   orden?: number | null;
   portada: string;
   fotos: string[];
@@ -20,6 +20,7 @@ function fotoLocal(valor: string): string {
 const esquema = z.object({
   titulo: texto,
   evento: texto,
+  fecha: texto.pipe(z.union([z.iso.date(), z.literal('')])).catch(''),
   publicado: z.boolean().default(false),
   orden: z.number().int().positive().nullish().catch(null),
   portada: texto.transform(fotoLocal),
@@ -52,9 +53,12 @@ export async function obtenerAlbumes(): Promise<Album[]> {
     .map(({ id, data }) => ({
       ...data,
       id,
-      fecha: eventos.get(data.evento)?.fecha ?? '',
-      tipo: eventos.get(data.evento)?.tipo ?? '',
+      nombreEvento: eventos.get(data.evento)?.nombre ?? '',
       portada: data.portada || data.fotos[0],
     }))
-    .sort((a, b) => b.fecha.localeCompare(a.fecha) || a.titulo.localeCompare(b.titulo));
+    .sort((a, b) => {
+      const fechaA = a.fecha || eventos.get(a.evento)?.fecha || '';
+      const fechaB = b.fecha || eventos.get(b.evento)?.fecha || '';
+      return fechaB.localeCompare(fechaA) || a.titulo.localeCompare(b.titulo);
+    });
 }

@@ -41,7 +41,7 @@ function fechaDe(fecha: string) {
                 <img src={ruta(album.portada)} alt="" loading="lazy" decoding="async">
                 <div>
                   <h2>{album.titulo}</h2>
-                  <p>{[album.tipo, fechaDe(album.fecha), `${album.fotos.length} ${album.fotos.length === 1 ? i.una : i.varias}`].filter(Boolean).join(' · ')}</p>
+                  <p>{[album.nombreEvento, fechaDe(album.fecha), `${album.fotos.length} ${album.fotos.length === 1 ? i.una : i.varias}`].filter(Boolean).join(' · ')}</p>
                 </div>
               </a>
             </li>

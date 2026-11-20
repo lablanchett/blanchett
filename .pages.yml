@@ -120,8 +120,8 @@ content:
       delete: true
     view:
       primary: titulo
-      fields: [titulo, evento, orden, publicado]
-      sort: [orden, titulo]
+      fields: [titulo, evento, fecha, orden, publicado]
+      sort: [orden, fecha, titulo]
     fields:
       - name: titulo
         label: Título del álbum
@@ -140,6 +140,12 @@ content:
         type: boolean
         default: false
         description: Los archivos subidos a Media son públicos aunque el álbum esté oculto. Subí únicamente fotos aprobadas para su publicación.
+      - name: fecha
+        label: Fecha del álbum
+        type: date
+        options:
+          format: yyyy-MM-dd
+        description: Elegí la fecha de esta edición. Si la dejás vacía, la tarjeta no muestra fecha.
       - name: orden
         label: Orden en la galería
         type: number
