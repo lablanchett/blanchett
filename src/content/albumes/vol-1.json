@@ -2,6 +2,7 @@
   "titulo": "VOL #1",
   "evento": "src/content/planes/intima-e-interactiva.md",
   "publicado": true,
+  "orden": 3,
   "portada": "/media/albumes/8.jpg",
   "fotos": [
     "/media/albumes/1.jpg",
