@@ -7,6 +7,7 @@ export interface Album {
   evento: string;
   fecha: string;
   tipo: string;
+  orden?: number | null;
   portada: string;
   fotos: string[];
 }
@@ -20,6 +21,7 @@ const esquema = z.object({
   titulo: texto,
   evento: texto,
   publicado: z.boolean().default(false),
+  orden: z.number().int().positive().nullish().catch(null),
   portada: texto.transform(fotoLocal),
   fotos: z.array(texto).nullish().transform((fotos) => fotos ?? []),
 });

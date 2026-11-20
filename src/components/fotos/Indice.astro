@@ -12,7 +12,9 @@ import { textosFotos } from '../../lib/textosFotos';
 
 const { locale } = Astro.props as { locale: Locale };
 const i = textosFotos[locale];
-const albumes = await obtenerAlbumes();
+const albumes = (await obtenerAlbumes()).sort((a, b) =>
+  (a.orden ?? Number.MAX_SAFE_INTEGER) - (b.orden ?? Number.MAX_SAFE_INTEGER)
+);
 const formatoFecha = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
 
 function fechaDe(fecha: string) {

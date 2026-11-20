@@ -120,7 +120,8 @@ content:
       delete: true
     view:
       primary: titulo
-      fields: [titulo, evento, publicado]
+      fields: [titulo, evento, orden, publicado]
+      sort: [orden, titulo]
     fields:
       - name: titulo
         label: Título del álbum
@@ -139,6 +140,13 @@ content:
         type: boolean
         default: false
         description: Los archivos subidos a Media son públicos aunque el álbum esté oculto. Subí únicamente fotos aprobadas para su publicación.
+      - name: orden
+        label: Orden en la galería
+        type: number
+        options:
+          min: 1
+          step: 1
+        description: Poné 1 para mostrarlo primero, 2 para el segundo y así sucesivamente. Los álbumes sin número van después, ordenados por fecha.
       - name: portada
         label: Foto de portada
         type: image
